@@ -2,46 +2,11 @@ import {useRef,useState, useEffect} from 'react'
 import { useGoogleLogin } from '@react-oauth/google';
 import { IconButton } from '@mui/material';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
-import styled from 'styled-components'
 import './login-page.css';
 import {Brand} from '../components';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import { useUserContext } from './../context/usercontext';
-
-
-
-const Container = styled.div`
-    height: 100%;
-    display: flex;
-    // border: 1px solid blue;
-    overflow: hidden;
-`
-const FormContainer = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex: 2 1 120px;
-    max-height: 100%;
-    background: rgb(255, 255, 255);
-    color: rgb(76, 76, 76);
-`
-
-const SignUpSection = styled.div`
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    
-`
-const ContentSection = styled.div`
-    width: 100%;
-    height: 100%;
-    margin-top: 24px;
-    // border: 1px solid green;
-    
-`
 
 
 
@@ -130,21 +95,13 @@ const Test = () => {
       },[])
 
   return (
-    <Container>
-        <FormContainer>
-            <SignUpSection>
+    <div class='container'>
+        <div class='formcontainer'>
+            <div class='signup-section'>
             <span class="signup-link-text">Don't have an account yet?</span>
             <a href="http://localhost:3000/signup" class='signup-link-aTag'>Sign Up</a>
-            </SignUpSection>
-            <ContentSection>
-                {/* <div class='logo-wrapper'>
-                    <a href='http://localhost:3000' class='logo-link'>
-                        <div class='logo-text-wrapper'>
-                        <img src='./assets/logo.png' alt='logo'/>
-                        <span class='logo-text'>MyDear</span>
-                        </div>
-                    </a>
-                </div> */}
+            </div>
+            <div class='content-section'>
                 <Brand/>
                 <main class='auth-container'>
                     <div class='auth-content'>
@@ -226,9 +183,9 @@ const Test = () => {
                  
                 </main>
 
-            </ContentSection>
-        </FormContainer>
-    </Container>
+            </div>
+        </div>
+    </div>
   )
 
 }

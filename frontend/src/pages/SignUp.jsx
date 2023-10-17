@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react'
-import styled from 'styled-components'
 import { IconButton } from '@mui/material';
 import { VisibilityOff, VisibilityOutlined, KeyboardReturnOutlined } from '@mui/icons-material';
 import './signup-page.css';
@@ -7,27 +6,6 @@ import {Brand} from '../components';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
-
-const FormContainer = styled.div`
-    // width: 100%;
-    height: 100vh;
-    display: flex;
-    // flex: 2 1 50%;
-    
-    // background: rgb(255, 255, 255);
-    color: rgb(76, 76, 76);
-   
-`
-const SignInSection = styled.div`
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    grid-column: 2 / 2;
-    grid-row: 1 / 2;
-    // border: 1px solid red;
-    
-`
 
 const EML_RGX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_RGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,24}$/;
@@ -129,7 +107,7 @@ const SignUp = () => {
 
   return (
    
-        <FormContainer>
+        <div class='form-container'>
             <section class='right-section'>
                 <div className="rightsection-content-wrapper">
                     <h1>Sign up to your happiest place</h1>
@@ -144,10 +122,10 @@ const SignUp = () => {
                         <KeyboardReturnOutlined fontSize='medium'/>
                     </IconButton>
                 </div>}
-                <SignInSection>
+                <div class='signin-section'>
                     <span class="signin-link-text">Already have an account?</span>
                     <a href="http://localhost:3000/login" class='signin-link-aTag'>Log in</a>
-                </SignInSection>
+                </div>
                 {generalRegistration? 
                     <div className="signup-form-wrapper">
                         <div className="signup-content">
@@ -237,7 +215,7 @@ const SignUp = () => {
                         </div>
                     </div>}
             </section>
-        </FormContainer>
+        </div>
   )
 }
 

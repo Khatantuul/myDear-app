@@ -3,7 +3,6 @@ import './create-album.css';
 import { TagInput, FileUploader, AlbumGrid, UserDetailsDropdown } from '../components';
 import {Camera, Description} from '@mui/icons-material';
 import axios from 'axios';
-// import {useSelector} from 'react-redux';
 import { useUserContext } from './../context/usercontext';
 import {Link} from 'react-router-dom';
 
