@@ -1,0 +1,40 @@
+# Node.js
+node_modules/
+
+# Backend
+.env
+
+# Frontend
+/build
+/.env.local
+/.env.development.local
+/.env.test.local
+/.env.production.local
+
+# Editor files
+.vscode/
+.idea/
+
+# Dependency directories
+yarn-error.log
+npm-debug.log
+
+# macOS
+.DS_Store
+
+# Webpack
+/dist/
+
+# Logs
+logs/
+*.log
+
+# OS generated files
+Thumbs.db
+.DS_Store
+ehthumbs.db
+
+# Temporary files
+*.swp
+*.swo
+
