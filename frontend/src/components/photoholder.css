@@ -1,0 +1,36 @@
+.card.MuiBox-root{
+    border: 1px dashed #1475cf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: .5rem;
+    box-shadow: 0 0 5px 2px rgba(0,0,0,.3); /*top bottom blur shadow color*/
+    width: 450px;
+    height: 400px;
+    transform: perspective(1000px) rotateY(var(--rotate-Y,0)) translateY(var(--translate-Y,0));
+    transform-style: preserve-3d;
+    transition: 800ms;
+    cursor: pointer;
+}
+
+.card.MuiBox-root:hover{
+    box-shadow: 0 0 25px 4px rgba(0,0,0,.5);
+}
+
+.card.MuiBox-root.flip{
+    --translate-Y: -2px;
+    --rotate-Y: 180deg;
+}
+
+.card .front.MuiBox-root, 
+.card .back.MuiBox-root{
+    position: absolute;
+    padding: 2rem;
+    backface-visibility: hidden;
+
+}
+
+.card .back.MuiBox-root{
+    transform: rotateY(180deg);
+}

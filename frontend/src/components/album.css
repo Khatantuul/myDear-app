@@ -1,0 +1,39 @@
+.album-pages{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between; 
+    align-items: center;
+} 
+
+.view-buttons-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-buttons-wrapper .grid,
+.view-buttons-wrapper .album{
+    width: 80px;
+    border: 0px;
+    background-color: #e3e3e3;
+    outline: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    min-height: 32px;
+    font-size: 14px;
+    line-height: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.view-buttons-wrapper .grid {
+    border-radius: 4px 0px 0px 4px;
+}
+.view-buttons-wrapper .album {
+    border-radius: 0px 4px 4px 0px;
+}
+
+.view-album-main{
+    margin-top: 20px;
+}

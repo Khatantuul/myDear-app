@@ -1,0 +1,36 @@
+.album-mode-main-wrapper{
+    width: 100vw;
+    height: 100vh;
+}
+
+.album-mode-album-whole{
+    display: flex;
+    margin: 10px auto;
+    border: 1px solid blue;
+    width: 90%;
+    height: 80%;
+}
+
+.album-mode-album-left-wrapper{
+    width: 50%;
+    border: 1px solid blue;
+    /* flex: 1; */
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding: 0px 12px;
+}
+
+.album-mode-album-right-wrapper{
+    /* width: 50%; */
+    flex: 1;
+    height: 100%;
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-width: 33%;
+    -moz-column-width: 33%;
+    column-width: 33%;
+    padding: 0px 12px;
+}

@@ -1,0 +1,12 @@
+.album-preview-container{
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+.preview-grid{
+    width: 150px;
+    height: 150px;
+    border: 1px solid red;
+}
