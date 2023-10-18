@@ -42,7 +42,7 @@ function App() {
               {/* <Route element={<CreateAlbum/>} path='/accounts/:accountId/studiospace'/> */}
             </Route>
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/album" element={<SingleAlbumView />} />
+            <Route path="/albums/:albumId" element={<SingleAlbumView />} />
             <Route path="/albums" element={<CreateAlbum />} />
             {/* <Route path="/test" element={<SingleAlbumView />} /> */}
             <Route path="/auth" element={<AuthRequest />} />

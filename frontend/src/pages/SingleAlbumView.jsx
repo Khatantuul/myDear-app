@@ -4,13 +4,16 @@ import { useUserContext } from './../context/usercontext';
 import { AlbumGrid } from '../components';
 import { PictureInPicture, Apps } from '@mui/icons-material';
 import './singlealbumview.css';
+import {Link, useParams} from 'react-router-dom';
+
 
 
 const SingleAlbumView = ({ match }) => {
-  const [album, setAlbum] = useState(null);
+  // const [album, setAlbum] = useState(null);
   const { user, updateUser } = useUserContext();
 
   console.log('user here', user)
+  const { albumId } = useParams();
 
   const [imageObjs, setImageObjs] = useState([]);
 
@@ -35,9 +38,10 @@ const hasRun = useRef(false);
     if (!hasRun.current){
     const fetchImages = async () => {
      try{
-        const response = await axios.get('http://localhost:9000/albums/test',{
+        const response = await axios.get(`http://localhost:9000/albums/${albumId}`,{
             headers: {
-                'User-ID': user.userID
+                'User-ID': user.userID,
+                'Album-ID': albumId
             }
         })
         .then(res=>{
@@ -63,8 +67,11 @@ const hasRun = useRef(false);
             <div className="create-album-header-left">
                 <div className="header-left-first">
                     <div className="create-album-back-studio">
-                        <a href="http://localhost:3000/accounts/:accountId/studiospace"
-                        class='header-back-studio'>My Studio</a>
+                        {/* <a href="http://localhost:3000/accounts/:accountId/studiospace"
+                        class='header-back-studio'>My Studio</a> */}
+                         <Link to={`/accounts/${user.userID}/studiospace`} className="header-back-studio">
+                                    My Studio
+                                </Link>
                     </div>
                     <span>/</span>
                 </div>

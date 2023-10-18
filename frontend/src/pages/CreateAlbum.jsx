@@ -4,7 +4,7 @@ import { TagInput, FileUploader, AlbumGrid, UserDetailsDropdown } from '../compo
 import {Camera, Description} from '@mui/icons-material';
 import axios from 'axios';
 import { useUserContext } from './../context/usercontext';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 
 
@@ -25,6 +25,8 @@ const CreateAlbum = () => {
         description: '',
         creator: user.userID
     })
+    const [albumId, setAlbumId] = useState(null);
+    const navigate = useNavigate();
 
     const maxUploads = 10;
 
@@ -74,7 +76,6 @@ const handleOnSave = (index,values) => {
         })
         return updatedPhotos;
     })
-    console.log(`selectedPhotos with the updates`, selectedPhotos);
 }
 
     const setAlbumTitle = (e) => {
@@ -106,8 +107,6 @@ const handleOnSave = (index,values) => {
         tags: []
     })
 
-    console.log('selectedPhosot now compressed', selectedPhotos);
-
 
     const handleUpload = async (e)=> {
         e.preventDefault();
@@ -138,7 +137,11 @@ const handleOnSave = (index,values) => {
                 withCredentials: true
             })
                 .then((res)=>{
-                    console.log("something good happened", res)
+                    setAlbumId((prev) => {
+                        return res.data.album._id;
+                      });
+                  
+                    // navigate(`/albums/${albumId}`);
                 })
                 .catch((err)=>{
                     console.log("something bad happened", err)
@@ -147,6 +150,12 @@ const handleOnSave = (index,values) => {
             console.log(err);
         }
     }
+
+    useEffect(() => {
+        if (albumId) {
+          navigate(`/albums/${albumId}`);
+        }
+      }, [albumId, navigate]);
 
 
     const handleChange = (e) =>{
@@ -187,9 +196,12 @@ const handleOnSave = (index,values) => {
                         <button onClick={()=>inputRef.current.click()}>Add photos</button>
                     </div>
                     <div className="create-album-header-right">
-                        <a href='#' class='create-album-publish' onClick={handleUpload}>
+                        {/* <a href='#' class='create-album-publish' onClick={handleUpload}>
                             <span>Publish</span>
-                        </a>
+                        </a> */}
+                        <Link to={`/albums/${albumId}`} className="create-album-publish" onClick={handleUpload}>
+                                    Publish
+                                </Link>
                     </div>
                     <UserDetailsDropdown/>
                 </div>
