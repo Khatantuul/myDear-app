@@ -1,7 +1,10 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, GetObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { fromIni } from '@aws-sdk/credential-provider-ini';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import fs from 'fs';
 import {config} from "dotenv";
+import { url } from "inspector";
+import Photo from './app/models/photo.js';
 
 config();
 
@@ -18,11 +21,11 @@ const s3 = new S3Client({
     }
   });
 
-export const uploadFile = async (buffer, filename, mimetype) => {
+export const uploadFile = async (buffer, filename, mimetype, userId) => {
 
         const command = new PutObjectCommand({
             Bucket: bucket,
-            Key: filename,
+            Key: `${userId}/${filename}`,
             Body: buffer,
             ContentType: mimetype,
           });
@@ -37,8 +40,81 @@ export const uploadFile = async (buffer, filename, mimetype) => {
         .catch((err)=>{
             console.error("Error uploading file",err)
         })
-    // })  
-
-    // return Promise.all(uploadPromises);
     
 }
+export const getImageKeys = async (userId) => {
+    const command = new ListObjectsV2Command({
+      Bucket: bucket,
+      Prefix: userId,
+    });
+  
+    try {
+      const {Contents = []} = await s3.send(command);
+      console.log('contents', Contents)
+      return Contents.map(image =>
+         image.Key
+        //  ur: `https://${bucket}.s3.amazonaws.com/${image.Key}`
+        // ETag
+        )
+    } catch (err) {
+      console.error('Error retrieving file from S3', err);
+      throw err; 
+    }
+  };
+
+// export const getPresignedUrls = async (userId) => {
+//     try{
+//         const imageKeys = await getImageKeys(userId);
+
+//         const presignedUrls = await Promise.all( imageKeys.map(key=>{
+//             const command = new GetObjectCommand({Bucket: bucket, Key: key});
+
+//            const photoDetails = await Photo.findOne({s3url: `https://${bucket}.s3.amazonaws.com/${key}`});
+//             const {note, tags} = photoDetails;
+//             console.log('photodetails',photoDetails)
+//             return getSignedUrl(s3, command, { expiresIn: 900 })
+//         })
+//         )
+
+//         return presignedUrls;
+//     }catch(err){
+//         console.log(err);
+//         throw err; 
+//     }
+// }
+
+export const getPresignedUrls = async (userId) => {
+  try {
+    const imageKeys = await getImageKeys(userId);
+    console.log('imagekeys', imageKeys);
+    const presignedUrls = [];
+    
+    for (const key of imageKeys) {
+      const command = new GetObjectCommand({ Bucket: bucket, Key: key });
+      const s3urlKey = key.split('/')[1];
+      console.log('s3urlKey', s3urlKey);
+
+      const photoDetails = await Photo.findOne({ url: `https://${bucket}.s3.amazonaws.com/${s3urlKey}` });
+      
+      // Assuming Photo.findOne returns null or an object with 'note' and 'tags'
+      const { note, tags } = photoDetails || {};
+      
+      console.log('photodetails', photoDetails);
+      
+      const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 900 });
+
+      presignedUrls.push({
+        presignedUrl: presignedUrl,
+        note: note,
+        tags: tags,
+      });
+    }
+
+    return presignedUrls;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+}
+
+  

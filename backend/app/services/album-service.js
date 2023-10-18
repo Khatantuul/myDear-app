@@ -32,3 +32,12 @@ export const getAlbums = async (creator) => {
         throw err;
     }
 }
+
+export const getAlbum = async (albumID) => {
+    try{
+        const album = await Album.findById(albumID).populate({ path: 'photos'}).exec();
+        return album;
+    }catch(err){
+        throw err;
+    }
+}

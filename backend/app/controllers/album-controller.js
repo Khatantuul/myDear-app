@@ -1,6 +1,6 @@
 import * as albumServices from './../services/album-service.js'
 import * as photoServices from './../services/photo-service.js'
-import { uploadFile } from "../../s3.js";
+import { getPresignedUrls, uploadFile } from "../../s3.js";
 import multer from "multer";
 import sharp from "sharp";
 import fs from "fs";
@@ -34,8 +34,6 @@ export const createAlbum = async (req, res) => {
             const albumInfo = JSON.parse(req.body.albumInfo);
             const photoInfo = JSON.parse(req.body.photoInfo);
 
-            console.log('albumInfo',albumInfo);
-
             const { title, description, tags, creator } = albumInfo;
             const photos = req.files;
             
@@ -47,11 +45,17 @@ export const createAlbum = async (req, res) => {
 
                 console.log('buffer',buffer);
                 const compressedImageBuffer = await sharp(buffer)
-                .resize({ width: 800, height: 600 }) 
-                .jpeg({ quality: 80 }) 
+                .resize({
+                  width: 800,
+                  height: 600,
+                  fit: sharp.fit.inside, // or sharp.fit.cover depending on your preference
+                  withoutEnlargement: true,
+                })
+                .jpeg({ quality: 90 })
                 .toBuffer();
+              
 
-                const s3url = await uploadFile(compressedImageBuffer, photoFile.filename, photoFile.mimetype);
+                const s3url = await uploadFile(compressedImageBuffer, photoFile.filename, photoFile.mimetype, creator);
 
                 if (photoInfo[idx].note || photoInfo[idx].tags){
                     const photo = await photoServices.savePhoto({note: photoInfo[idx].note, tags: photoInfo[idx].tags,  s3url: s3url});
@@ -69,7 +73,6 @@ export const createAlbum = async (req, res) => {
             // await album.save();
             setSuccessResponse({album, photos: savedPhotos}, res);
         }catch(err){
-            console.log("createAlbum from controller",err)
             setErrorResponse(err,res);
         }
     })
@@ -81,6 +84,26 @@ export const fetchAllAlbums = async(req, res) => {
         const user = req.session.user;
         const albums = await albumServices.getAlbums(user.userID);
         setSuccessResponse(albums, res);
+    }catch(err){
+        setErrorResponse(err,res);
+    }
+}
+
+export const fetchAllUserPhotos = async(req, res) => {
+    const userId = req.headers['user-id'];
+    try{
+
+       if (!userId){
+        const err = new Error("UserId not received");
+        err.status = 400;
+        throw err;
+       }
+
+       const photoObj = await getPresignedUrls(userId);
+
+       setSuccessResponse(photoObj, res);
+
+        
     }catch(err){
         setErrorResponse(err,res);
     }
