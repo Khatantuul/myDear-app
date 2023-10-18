@@ -35,5 +35,6 @@
 }
 
 .view-album-main{
-    margin-top: 20px;
+    margin-top: 5px;
+    overflow-y: auto;
 }

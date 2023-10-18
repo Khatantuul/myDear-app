@@ -3,7 +3,7 @@ import {TagInput} from '.';
 import { EditNote, DeleteForever, Delete,HighlightOff } from '@mui/icons-material';
 import './albumgrid.css';
 
-const AlbumGrid = ({photos, handleOnSave, handleRemove}) => {
+const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
 
     // const {photos} = props;
 
@@ -35,8 +35,16 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove}) => {
         console.log('clecked', clicked)
         setSinglePhoto({...clicked, index: index});
         setModal(true);
-
       }
+      const openImageObj = (e,index) => {
+        // console.log(src);
+        handleOrientation(e);
+        const clicked = imageObjs[index]
+        console.log('clecked', clicked)
+        setSinglePhoto({...clicked, index: index});
+        setModal(true);
+      }
+
 
       useEffect(() => {
         if (modal) {
@@ -83,6 +91,7 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove}) => {
 
   return (
     <>
+    {photos && 
     <div className="gallery">
         <dialog ref={ref} class={modal}>
             <div className="dialog-full">
@@ -106,12 +115,8 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove}) => {
             </div>
         </dialog>
       {photos.map((item,index)=>{
-        // console.log(imgData)
         return (
           <div className="picture" key={index} onClick={(e)=>openImage(e,index)} onMouseEnter={()=>setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
-            {/* <img loading='lazy' src={item.url} alt='photo' style={{width: '100%'}} 
-            // onLoad={(item)=>handleOrientation(item)}
-            /> */}
                 <picture>
                   <source srcSet={item.url}  type="image/webp" />
                   <img src={item.url}  alt="Example" style={{width: '100%'}}  />
@@ -124,6 +129,47 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove}) => {
       })}
     
     </div>
+    }
+
+    {imageObjs && 
+    <div className="gallery">
+        <dialog ref={ref} class={modal}>
+            <div className="dialog-full">
+                <div className={`dialog-img-wrapper ${horizontal? "horizontal" : "vertical"}`}>
+                    <img src={singlePhoto.presignedUrl} alt="photos" />
+                </div>
+                {/* <div className="dialog-img-details-wrapper">
+                    <div className="dialog-img-details-note">
+                        <span><EditNote sx={{color:'rgb(137, 137, 137)', marginRight:'3px'}}/> Photo note:</span>
+                        <input type="text" placeholder="Me and the gang at Java Joe's." 
+                        maxLength={20} name='note' id='note'
+                        onChange={handleChange}/>
+                    </div>
+                    <TagInput title="Photo" size='16px' handleTags={handleTags}/>
+                    <div className="dialog-img-details-buttons">
+                    <button onClick={handleSaveAndClose}>Save</button>
+                    <button onClick={()=>setModal(false)}>Cancel</button>
+                    </div>
+                </div> */}
+                
+            </div>
+        </dialog>
+      {imageObjs.map((imageObj,index)=>{
+        return (
+          <div className="picture" key={index} onClick={(e)=>openImageObj(e,index)} onMouseEnter={()=>setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
+                <picture>
+                  <source srcSet={imageObj.presignedUrl}  type="image/webp" />
+                  <img src={imageObj.presignedUrl}  alt="Example" style={{width: '100%'}}  />
+              </picture>
+              {/* {hoveredIndex === index && 
+              <Delete onClick={(e)=>handleRemove(e,index)} sx={{color:'white' ,position:'absolute', top:'5px', right:'5px'}}/>
+            } */}
+          </div>
+        )
+      })}
+    
+    </div>
+    }
     </>
   )
 }

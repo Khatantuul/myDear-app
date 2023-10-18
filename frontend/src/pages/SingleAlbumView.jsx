@@ -1,35 +1,60 @@
-import {useState} from 'react';
-import {Stack, Box} from '@mui/material';
+import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import { useUserContext } from './../context/usercontext';
+import { AlbumGrid } from '../components';
 import { PictureInPicture, Apps } from '@mui/icons-material';
-import PhotoHolder from './PhotoHolder';
-import {AlbumGrid} from '.';
-import './album.css';
+import './singlealbumview.css';
 
 
-const Album = () => {
+const SingleAlbumView = ({ match }) => {
+  const [album, setAlbum] = useState(null);
+  const { user, updateUser } = useUserContext();
 
-    const albumData = [
-        { id: 1, datatsrc: 'https://images.unsplash.com/photo-1527349974300-f63f8ff9992d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1526&q=80' },
-        { id: 2, datatsrc: 'https://images.unsplash.com/photo-1514328525431-eac296c01d82?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1618&q=80' },
-        { id: 3, datatsrc: 'https://images.unsplash.com/photo-1481455473976-c280ae7c10f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80' },
-        { id: 4, datatsrc: 'https://images.unsplash.com/photo-1579213838826-51de388c360c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80' },
-        { id: 5, datatsrc: 'https://images.unsplash.com/photo-1514328525431-eac296c01d82?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1618&q=80' },
-        { id: 6, datatsrc: 'https://images.unsplash.com/photo-1481455473976-c280ae7c10f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80' }
-      ]
+  console.log('user here', user)
 
-    const [currentPage, setCurrentPage] = useState(0);
+  const [imageObjs, setImageObjs] = useState([]);
 
-    const nextPage = () => {
-      if (currentPage < albumData.length - 1) {
-        setCurrentPage(currentPage + 1);
-      }
+//   useEffect(() => {
+//     const fetchAlbum = async () => {
+//       try {
+//         const albumId = match.params.albumId;
+//         const response = await axios.get(`/api/albums/${albumId}`);
+//         const fetchedAlbum = response.data;
+//         setAlbum(fetchedAlbum);
+//       } catch (error) {
+//         console.error('Error fetching album details', error);
+//       }
+//     };
+
+//     fetchAlbum();
+//   }, [match.params.albumId]);
+const hasRun = useRef(false);
+
+  useEffect(() => {
+
+    if (!hasRun.current){
+    const fetchImages = async () => {
+     try{
+        const response = await axios.get('http://localhost:9000/albums/test',{
+            headers: {
+                'User-ID': user.userID
+            }
+        })
+        .then(res=>{
+          setImageObjs(res.data);
+        })
+     }catch(err){
+          console.log('err in the front',err)
+     }
     };
-  
-    const prevPage = () => {
-      if (currentPage > 0) {
-        setCurrentPage(currentPage - 1);
-      }
-    };
+
+    fetchImages();
+    hasRun.current = true;
+  }
+  }, []);
+
+  console.log('imageObjs', imageObjs)
+
 
   return (
     <div className="main-container">
@@ -47,6 +72,20 @@ const Album = () => {
                     <span>New Album</span>
                 </div>
             </div>
+            <div className="view-buttons-wrapper">
+                  <button type='button' class='grid'>
+                  <div className="view-button-icon">
+                      <Apps />
+                    </div>
+                    <span>Grid</span>
+                  </button>
+                  <button type='button' class='album'>
+                    <div className="view-button-icon">
+                      <PictureInPicture/>
+                    </div>
+                    <span>Album</span>
+                  </button>
+              </div>
             <div className="create-album-header-right">
                 {/* <a href='' class='create-album-publish'>
                     <span>Publish</span>
@@ -68,21 +107,8 @@ const Album = () => {
             </div>
         </div>
         <div className="view-album-main">
-             <div className="view-buttons-wrapper">
-                  <button type='button' class='grid'>
-                  <div className="view-button-icon">
-                      <Apps />
-                    </div>
-                    <span>Grid</span>
-                  </button>
-                  <button type='button' class='album'>
-                    <div className="view-button-icon">
-                      <PictureInPicture/>
-                    </div>
-                    <span>Album</span>
-                  </button>
-              </div>
-          <AlbumGrid/>
+        
+          <AlbumGrid imageObjs={imageObjs}/>
             {/* <div className="create-album-left">
                 <div className="create-album-left-menu">
                     <div className="left-menu-album-title">
@@ -140,8 +166,7 @@ const Album = () => {
     //       </button>
     //     </div>
     //   </div>
-  
-  )
-}
+  );
+};
 
-export default Album
+export default SingleAlbumView;

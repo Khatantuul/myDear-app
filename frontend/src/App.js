@@ -18,6 +18,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { UserProvider } from "./context/usercontext";
 import PrivateRoute from "./util/PrivateRoute";
+import SingleAlbumView from "./pages/SingleAlbumView";
 
 const theme = createTheme({
   typography: {
@@ -41,9 +42,9 @@ function App() {
               {/* <Route element={<CreateAlbum/>} path='/accounts/:accountId/studiospace'/> */}
             </Route>
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/album" element={<Album />} />
+            <Route path="/album" element={<SingleAlbumView />} />
             <Route path="/albums" element={<CreateAlbum />} />
-            <Route path="/test" element={<Album />} />
+            {/* <Route path="/test" element={<SingleAlbumView />} /> */}
             <Route path="/auth" element={<AuthRequest />} />
 
             <Route

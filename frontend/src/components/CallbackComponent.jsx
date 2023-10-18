@@ -76,7 +76,7 @@ const CallbackComponent = () => {
     if (authCode && state === null) {
       exchangeCodeForAccessToken(authCode);
     }
-    if (authCode && state.login){
+    if (authCode && state && state.login ){
       exchangeCodeForAccessTokenForLogin(authCode)
     }
 
