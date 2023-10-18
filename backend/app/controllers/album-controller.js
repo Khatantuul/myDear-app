@@ -54,7 +54,7 @@ export const createAlbum = async (req, res) => {
                 .toBuffer();
               
                 const compressed = {...photoFile, buffer: compressedImageBuffer}
-                console.log('photoFile', photoFile)
+                // console.log('photoFile', photoFile)
                 const s3url = await uploadFile(compressed, creator, album._id);
 
                 if (photoInfo[idx].note || photoInfo[idx].tags){
@@ -81,9 +81,18 @@ export const createAlbum = async (req, res) => {
 
 export const fetchAllAlbums = async(req, res) => {
     try{
+        const preview = req.headers['preview'];
         const user = req.session.user;
         const albums = await albumServices.getAlbums(user.userID);
-        setSuccessResponse(albums, res);
+
+        // console.log('albums', albums)
+        let populated = [];
+        for (let album of albums){
+            const r = await getPresignedUrls(user.userID,album._id,preview)
+            populated.push({album, presignedUrls: r})
+        }
+
+        setSuccessResponse(populated, res);
     }catch(err){
         setErrorResponse(err,res);
     }

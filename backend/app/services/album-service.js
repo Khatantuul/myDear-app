@@ -25,8 +25,9 @@ export const addAlbumPhotos = async (albumID, photoID) => {
 
 export const getAlbums = async (creator) => {
     try{
-        const albumsByUser = await Album.find({creator: creator}).populate({ path: 'photos', options: { limit: 5 } }).exec();
+        const albumsByUser = await Album.find({creator: creator}).populate({ path: 'photos', perDocumentLimit: 4 }).exec();
 
+        console.log('albumsByUser from album service', albumsByUser)
         return albumsByUser;
     }catch(err){
         throw err;
