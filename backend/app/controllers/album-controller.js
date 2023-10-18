@@ -43,7 +43,6 @@ export const createAlbum = async (req, res) => {
 
                 const buffer = fs.readFileSync(photoFile.path);
 
-                console.log('buffer',buffer);
                 const compressedImageBuffer = await sharp(buffer)
                 .resize({
                   width: 800,
@@ -54,8 +53,9 @@ export const createAlbum = async (req, res) => {
                 .jpeg({ quality: 90 })
                 .toBuffer();
               
-
-                const s3url = await uploadFile(compressedImageBuffer, photoFile.filename, photoFile.mimetype, creator);
+                const compressed = {...photoFile, buffer: compressedImageBuffer}
+                console.log('photoFile', photoFile)
+                const s3url = await uploadFile(compressed, creator, album._id);
 
                 if (photoInfo[idx].note || photoInfo[idx].tags){
                     const photo = await photoServices.savePhoto({note: photoInfo[idx].note, tags: photoInfo[idx].tags,  s3url: s3url});
@@ -92,18 +92,30 @@ export const fetchAllAlbums = async(req, res) => {
 export const fetchAllUserPhotos = async(req, res) => {
     const userId = req.headers['user-id'];
     try{
-
        if (!userId){
         const err = new Error("UserId not received");
         err.status = 400;
         throw err;
        }
-
        const photoObj = await getPresignedUrls(userId);
-
        setSuccessResponse(photoObj, res);
+    }catch(err){
+        setErrorResponse(err,res);
+    }
+}
 
-        
+export const fetchAllAlbumPhotos = async(req, res) => {
+    const userId = req.headers['user-id'];
+    const albumId = req.headers['album-id'];
+
+    try{
+       if (!userId || !albumId){
+        const err = new Error("UserId or AlbumId not received");
+        err.status = 400;
+        throw err;
+       }
+       const photoObj = await getPresignedUrls(userId, albumId);
+       setSuccessResponse(photoObj, res);
     }catch(err){
         setErrorResponse(err,res);
     }

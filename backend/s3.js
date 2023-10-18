@@ -21,20 +21,20 @@ const s3 = new S3Client({
     }
   });
 
-export const uploadFile = async (buffer, filename, mimetype, userId) => {
+export const uploadFile = async (compressed, userId, albumId) => {
 
         const command = new PutObjectCommand({
             Bucket: bucket,
-            Key: `${userId}/${filename}`,
-            Body: buffer,
-            ContentType: mimetype,
+            Key: `${userId}/${albumId}/${compressed.filename}`,
+            Body: compressed.buffer,
+            ContentType: compressed.mimetype,
           });
         
 
         return s3.send(command)
         .then((data)=>{
             console.log("File uploaded successfully")
-            const fileUrl = `https://${bucket}.s3.amazonaws.com/${filename}`;
+            const fileUrl = `https://${bucket}.s3.amazonaws.com/${compressed.filename}`;
             return fileUrl;
         })
         .catch((err)=>{
@@ -42,10 +42,30 @@ export const uploadFile = async (buffer, filename, mimetype, userId) => {
         })
     
 }
-export const getImageKeys = async (userId) => {
+export const getAllImageKeys = async (userId) => {
     const command = new ListObjectsV2Command({
       Bucket: bucket,
       Prefix: userId,
+    });
+  
+    try {
+      const {Contents = []} = await s3.send(command);
+      console.log('contents', Contents)
+      return Contents.map(image =>
+         image.Key
+        //  ur: `https://${bucket}.s3.amazonaws.com/${image.Key}`
+        // ETag
+        )
+    } catch (err) {
+      console.error('Error retrieving file from S3', err);
+      throw err; 
+    }
+  };
+
+export const getAlbumImageKeys = async (userId, albumId) => {
+    const command = new ListObjectsV2Command({
+      Bucket: bucket,
+      Prefix: `${userId}/${albumId}`,
     });
   
     try {
@@ -83,15 +103,21 @@ export const getImageKeys = async (userId) => {
 //     }
 // }
 
-export const getPresignedUrls = async (userId) => {
+export const getPresignedUrls = async (userId, albumId) => {
   try {
-    const imageKeys = await getImageKeys(userId);
-    console.log('imagekeys', imageKeys);
+
+    let imageKeys = []
+    if(userId && albumId === null){
+      imageKeys = await getAllImageKeys(userId);
+    }else if(userId && albumId){
+      imageKeys = await getAlbumImageKeys(userId, albumId);
+    }
+    
     const presignedUrls = [];
     
     for (const key of imageKeys) {
       const command = new GetObjectCommand({ Bucket: bucket, Key: key });
-      const s3urlKey = key.split('/')[1];
+      const s3urlKey = key.split('/')[2];
       console.log('s3urlKey', s3urlKey);
 
       const photoDetails = await Photo.findOne({ url: `https://${bucket}.s3.amazonaws.com/${s3urlKey}` });

@@ -8,6 +8,8 @@ router.route("/")
     .get(albumController.fetchAllAlbums)
 router.route("/test")
     .get(albumController.fetchAllUserPhotos)
+router.route("/:albumId")
+    .get(albumController.fetchAllAlbumPhotos)
  
 
 export default router;
