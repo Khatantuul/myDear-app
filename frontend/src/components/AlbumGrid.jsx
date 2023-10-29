@@ -1,24 +1,18 @@
 import {useState, useRef, useEffect} from 'react';
 import {TagInput} from '.';
-import { EditNote, DeleteForever, Delete,HighlightOff } from '@mui/icons-material';
+import { EditNote, DeleteForever, Delete,HighlightOff, ModeOfTravelTwoTone } from '@mui/icons-material';
 import './albumgrid.css';
+import { fabClasses } from '@mui/material';
 
 const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
 
     // const {photos} = props;
 
-    // const albumData = [
-    //     { id: 2, datasrc: '/assets/bday.jpeg' },
-    //     { id: 3, datasrc: 'https://images.unsplash.com/photo-1481455473976-c280ae7c10f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80' },
-    //     { id: 4, datasrc: 'https://images.unsplash.com/photo-1579213838826-51de388c360c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80' },
-    //     { id: 5, datasrc: 'https://images.unsplash.com/photo-1514328525431-eac296c01d82?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1618&q=80' },
-    //     // { id: 6, datasrc: 'https://unsplash.com/photos/eHOZjZEx7u8' },
-    //     { id: 1, datasrc: '/assets/child-3.jpeg' }
-    //   ]
 
       const [singlePhoto, setSinglePhoto] = useState({});
       const ref = useRef(null);
       const [modal, setModal] = useState(false);
+      const [flippable, setFlippable] = useState(false);
       const [horizontal, setHorizontal] = useState(false);
       const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -29,7 +23,6 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
     })
       
       const openImage = (e,index) => {
-        // console.log(src);
         handleOrientation(e);
         const clicked = photos[index]
         console.log('clecked', clicked)
@@ -37,12 +30,12 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
         setModal(true);
       }
       const openImageObj = (e,index) => {
-        // console.log(src);
         handleOrientation(e);
         const clicked = imageObjs[index]
         console.log('clecked', clicked)
         setSinglePhoto({...clicked, index: index});
         setModal(true);
+        setFlippable(true);
       }
 
 
@@ -50,13 +43,27 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
         if (modal) {
           ref.current?.showModal();
         }else{
-            ref.current?.close();
+          ref.current?.close();
         }
       }, [singlePhoto, modal])
 
 
+      useEffect(() => {
+        function handleClickOutside(event) {
+          if(event.target === ref.current){
+            setModal(false);
+          }
+        }
+
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+          document.removeEventListener("click", handleClickOutside);
+        };
+      });
+
+    
+
       const handleOrientation = (e) => {
-        // console.log(photo)
         if (e.target.width > e.target.height) {
           setHorizontal(true);
         }else{
@@ -71,12 +78,10 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
 
       const handleTags= (tags) => {
         setPhotoValues(prev=>({...prev, tags:tags}));
-        // setOnFileSelected(true);
       };
 
       const handleSaveAndClose = () => {
         setModal(false);
-        //onSave pass the photoValues
         console.log('singlePhoto', singlePhoto);
         const photo = {...singlePhoto, ...photoValues};
         handleOnSave(singlePhoto.index, photo);
@@ -133,29 +138,19 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
 
     {imageObjs && 
     <div className="gallery">
-        <dialog ref={ref} class={modal}>
-            <div className="dialog-full">
-                <div className={`dialog-img-wrapper ${horizontal? "horizontal" : "vertical"}`}>
-                    <img src={singlePhoto.presignedUrl} alt="photos" />
+        <dialog ref={ref} class="some" >
+            <div className={`dialog-full ${flippable ? '' : 'flipped'}`} onClick={()=>setFlippable(!flippable)}>
+                <div className={`dialog-img-wrapper ${horizontal? "horizontal" : "vertical"} front`} >
+                    <img  src={singlePhoto.presignedUrl} alt="photos" />
                 </div>
-                {/* <div className="dialog-img-details-wrapper">
-                    <div className="dialog-img-details-note">
-                        <span><EditNote sx={{color:'rgb(137, 137, 137)', marginRight:'3px'}}/> Photo note:</span>
-                        <input type="text" placeholder="Me and the gang at Java Joe's." 
-                        maxLength={20} name='note' id='note'
-                        onChange={handleChange}/>
-                    </div>
-                    <TagInput title="Photo" size='16px' handleTags={handleTags}/>
-                    <div className="dialog-img-details-buttons">
-                    <button onClick={handleSaveAndClose}>Save</button>
-                    <button onClick={()=>setModal(false)}>Cancel</button>
-                    </div>
-                </div> */}
-                
+                <div className="back">
+                  <div>{singlePhoto.note ? singlePhoto.note : "Some note that I want to"}</div>
+                </div>
             </div>
         </dialog>
       {imageObjs.map((imageObj,index)=>{
         return (
+       
           <div className="picture" key={index} onClick={(e)=>openImageObj(e,index)} onMouseEnter={()=>setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
                 <picture>
                   <source srcSet={imageObj.presignedUrl}  type="image/webp" />

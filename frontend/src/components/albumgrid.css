@@ -6,8 +6,9 @@
     -moz-column-width: 33%;
     column-width: 33%;
     padding: 10px 12px;
-    
+    perspective: 600px;
 }
+
 
 .gallery .picture{
     -webkit-transition: all 350ms ease;
@@ -16,6 +17,7 @@
     margin-bottom: 12px;
     position: relative;
 }
+
 
 @media (max-width: 991px){
     .gallery{
@@ -45,30 +47,76 @@
     margin: auto ;
     border: none;
     border-radius: 5px;
+    outline: none;
+
 }
 .gallery dialog::backdrop{
     background: hsla(0, 0%, 0%, .5);
+}
+
+
+dialog.some .dialog-full{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
+.front, .back{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+}
+
+.back{
+    transform: rotateY(180deg);
+    color: #262627;
+    width: auto;
+    height: auto;
+    font-style: italic;
+    /* padding: 400px 150px; */
+    box-shadow: 0 0 5px 2px rgba(0,0,0,.3); 
+}
+
+.dialog-full.flipped{
+    transform: rotateY(180deg);
 }
 
 .gallery dialog .dialog-full{
     display: flex;
     width: 100%;
     height: 85vh;
+    position: relative;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+    
+}
+
+.gallery dialog.some .dialog-full{
+    width: 55vw;
 }
 
 .dialog-full .dialog-img-wrapper{
+
     width: 685px;
     height: 620px;
-    /* max-height: 670px; */
     aspect-ratio: 1/1;
-    /* border: 1px solid red; */
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     border-right: 1px solid #a7a7a7;
     padding: 20px;
 }
+
+dialog.some .dialog-img-wrapper{
+    border-right: none ;
+}
+
 
 .dialog-full .dialog-img-details-wrapper{
     /* max-width: 500px;
@@ -79,7 +127,6 @@
     justify-content: center;
     align-items: flex-start;
     width: 400px;
-    /* border: 1px solid orange; */
 }
 
 
@@ -93,8 +140,18 @@
     box-sizing: border-box;
     object-fit: cover;
     object-position: center;
-    
+    z-index: 100;
+    box-shadow: 0 0 5px 2px rgba(0,0,0,.3);     
 } 
+
+.gallery dialog.some .dialog-img-wrapper.vertical + .back{
+    width: 65%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .gallery dialog .dialog-img-wrapper.horizontal img{
     display: block;
     width: auto;
@@ -105,8 +162,18 @@
     box-sizing: border-box;
     object-fit: cover;
     object-position: center;
-    
+    z-index: 100;
+    box-shadow: 0 0 5px 2px rgba(0,0,0,.3); 
 } 
+
+.gallery dialog.some .dialog-img-wrapper.horizontal + .back{
+    width: 95%;
+    height: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 .dialog-img-details-note{
     display: flex;
