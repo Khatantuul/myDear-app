@@ -4,7 +4,7 @@ import {
   Uploader,
   Test,
   AlbumGrid,
-  AlbumMode,
+  AlbumMode
 } from "./components";
 import {
   Main,
@@ -44,7 +44,7 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/albums/:albumId" element={<SingleAlbumView />} />
             <Route path="/albums" element={<CreateAlbum />} />
-            {/* <Route path="/test" element={<SingleAlbumView />} /> */}
+            <Route path="/test" element={<Test />} />
             <Route path="/auth" element={<AuthRequest />} />
 
             <Route

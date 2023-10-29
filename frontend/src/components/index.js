@@ -1,4 +1,3 @@
-export {default as PhotoHolder} from './PhotoHolder';
 export {default as NavBar} from './NavBar';
 export {default as Hero} from './Hero';
 export {default as Step1} from './Step1';

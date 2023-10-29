@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './albummode.css';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
-const AlbumMode = () => {
+const AlbumMode = ({imageObjs}) => {
 
     const allphotos = [
         { id: 2, datasrc: '/assets/bday.jpeg' },
@@ -11,60 +12,58 @@ const AlbumMode = () => {
         { id: 5, datasrc: 'https://images.unsplash.com/photo-1514328525431-eac296c01d82?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1618&q=80' },
         // { id: 6, datasrc: 'https://unsplash.com/photos/eHOZjZEx7u8' },
       ]
-    const albumData = [];
+  
 
-      for(let i=0; i<allphotos.length; i+=6){
-        const first = allphotos.slice(i,i+3);
-        const second = (i+3 < allphotos.length) ? allphotos.slice(i+3,i+6): [];
+     const [active, setActive] = useState(2);
+     const count = imageObjs.length;
+     const visible_count = 1;
+     const [flip, setFlip] = useState(false)
 
-        albumData.push({first, second});
-      }
+     const handleImageClick = (i) => {
+      // Toggle the 'flipped' class on the clicked image
+      const imageWrappers = document.querySelectorAll('.img-wrapper');
+      imageWrappers[i].classList.toggle('flipped');
+    };
 
-      console.log(albumData)
+      
 
   return (
-    <div className="album-mode-main-wrapper">
-        <div className="album-mode-album-whole">
-            {albumData.map((pair,idx)=>(
-                <>
-                {/* {pair.first.} */}
-                <div className="album-mode-album-left-wrapper">
-                    {pair.first.map((item,index)=>(
-                          <div className={`picture ${ index===2 ? 'third':''}`} key={index}>
-                              <img src={item.datasrc} alt='photosss' style={{width: '100%'}}/>
-                          </div>
-                    ))}
-                </div>
-                <div className="album-mode-album-right-wrapper">
-                    {pair.second.map((item,index)=>(
-                          <div className="picture" key={index}>
-                              <img src={item.datasrc} alt='photosss' style={{width: '100%'}}/>
-                          </div>
-                    ))}
-                </div>
-                </>
-
-            ))}
-            </div>
-            {/* <div className="album-mode-album-left-wrapper">
-            {albumData.map((item,index)=>{
-        return (
-          <div className="picture" key={index} 
-        //   onClick={(e)=>openImage(e)}
-          >
-            <img src={item.datasrc} alt='photo' style={{width: '100%'}} 
-            // onLoad={(item)=>handleOrientation(item)}
-            />
+    
+      <div className="album-mode-main-wrapper">
+        <div className={`carousel ${flip ? 'flip': ''}`} onClick={()=>setFlip(!flip)} >
+        
+        {active > 0 && <button className='switch left' onClick={() => setActive(i => i - 1)}><ChevronLeft/></button>}
+        
+        {imageObjs.map((imageObj, i) => {
+     return (
+      <>
+          <div className={`img-wrapper front`}   style={{
+            '--active': i === active ? 1 : 0,
+            '--offset': (active - i) / 3,
+            '--direction': Math.sign(active - i),
+            '--abs-offset': Math.abs(active - i) / 3,
+            'display': Math.abs(active - i) > visible_count ? 'none' : 'block'
+            }} 
+            // onClick={() => handleImageClick(i)}
+            >
+            <img src={imageObj.presignedUrl}  alt={`photo` + i}/>
+             
           </div>
-        )
-      })} 
-            </div>
-            <div className="album-mode-album-right-wrapper">
-                Right
-            </div>
-         */}
+           <div className="back">
+           <p>{"SOmething for now"}</p>
+          </div>
+          </>
+          )
+          })}
+
+      {active < count - 1 && <button className='switch right' onClick={() => setActive(i => i + 1)}><ChevronRight/></button>}
+     
+      </div>
     </div>
-  )
+    
+    
+  );
 }
 
 export default AlbumMode
+
