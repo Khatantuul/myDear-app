@@ -4,17 +4,18 @@ import { EditNote, DeleteForever, Delete,HighlightOff, ModeOfTravelTwoTone } fro
 import './albumgrid.css';
 import { fabClasses } from '@mui/material';
 
-const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
-
-    // const {photos} = props;
+const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs, edit, handleEditRemove}) => {
 
 
       const [singlePhoto, setSinglePhoto] = useState({});
       const ref = useRef(null);
+      const modalRef = useRef(null);
       const [modal, setModal] = useState(false);
+      const [modalDelete, setModalDelete] = useState(false);
       const [flippable, setFlippable] = useState(false);
       const [horizontal, setHorizontal] = useState(false);
       const [hoveredIndex, setHoveredIndex] = useState(null);
+      const [showWarningIndex, setShowWarningIndex] = useState(null);
 
 
       const [photoValues, setPhotoValues] = useState({
@@ -94,6 +95,23 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
       //   // setPhotos(updatedPhotos);
       // } 
 
+      const onDeleteClick = (e, idx) => {
+        e.stopPropagation();
+        console.log('idx', idx)
+        setShowWarningIndex(idx);
+     
+      }
+    
+      useEffect(() => {
+        if (modalDelete) {
+          modalRef.current?.showModal();
+        }else{
+          modalRef.current?.close();
+        }
+      }, [modalDelete])
+
+
+
   return (
     <>
     {photos && 
@@ -127,7 +145,7 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
                   <img src={item.url}  alt="Example" style={{width: '100%'}}  />
               </picture>
               {hoveredIndex === index && 
-              <Delete onClick={(e)=>handleRemove(e,index)} sx={{color:'white' ,position:'absolute', top:'5px', right:'5px'}}/>
+              <Delete onClick={(e)=>handleRemove(e,index)} sx={{color:'black' ,position:'absolute', top:'5px', right:'5px'}}/>
             }
           </div>
         )
@@ -156,9 +174,21 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs}) => {
                   <source srcSet={imageObj.presignedUrl}  type="image/webp" />
                   <img src={imageObj.presignedUrl}  alt="Example" style={{width: '100%'}}  />
               </picture>
-              {/* {hoveredIndex === index && 
-              <Delete onClick={(e)=>handleRemove(e,index)} sx={{color:'white' ,position:'absolute', top:'5px', right:'5px'}}/>
-            } */}
+              {edit ?  
+              <Delete onClick={(e)=>onDeleteClick(e,index)} sx={{color:'black' ,position:'absolute', top:'5px', right:'5px'}}/>
+              : ''
+            }
+              {showWarningIndex === index && 
+              <div className="warning-dialog">
+                <p>Are you sure you want to delete this image?</p>
+                <button onClick={(e) => {e.stopPropagation(); setShowWarningIndex(null)}}>Cancel</button>
+                <button onClick={(e) => {
+                  // Handle deletion logic here
+                  handleEditRemove(e,index) 
+                  setShowWarningIndex(null)
+                }}>Confirm</button>
+              </div>
+            }
           </div>
         )
       })}

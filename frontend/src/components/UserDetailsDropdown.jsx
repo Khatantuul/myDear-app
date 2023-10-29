@@ -31,7 +31,7 @@ const UserDetailsDropdown = () => {
       };
     
       const logout = async() => {
-    
+        console.log("getting clicked")
         try{
           const response = await axios.delete('http://localhost:9000/api/sessions',{
             withCredentials: true

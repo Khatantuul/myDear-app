@@ -17,8 +17,54 @@
     margin-bottom: 12px;
     position: relative;
 }
+.gallery .picture:hover{
+    filter: opacity(.8);
+}
+
+.warning-dialog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: #fff;
+}
+
+.warning-dialog p{
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 200;
+    padding: 10px 10px 5px 10px;
+}
+
+.warning-dialog button{
+    padding: 5px 25px;
+    outline: none;
+    border: none;
+    background: #262627;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 200;
+    border-radius: 5px;
+    margin: 10px 5px;
+    cursor: pointer;
+}
 
 
+@media (max-width: 1400px){
+    .warning-dialog button{
+        padding: 5px 7px;
+        outline: none;
+        border: none;
+        background: #262627;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 200;
+        border-radius: 5px;
+        margin: 10px 5px;
+        cursor: pointer;
+    }
+}
 @media (max-width: 991px){
     .gallery{
         -webkit-column-count: 2;
@@ -27,6 +73,18 @@
         -webkit-column-width: 100%;
         -moz-column-width: 100%;
         column-width: 100%;
+    }
+    .warning-dialog button{
+        padding: 5px 25px;
+        outline: none;
+        border: none;
+        background: #262627;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 200;
+        border-radius: 5px;
+        margin: 10px 5px;
+        cursor: pointer;
     }
 }
 @media (max-width: 700px){
@@ -38,9 +96,7 @@
     }
 }
 
-.gallery .picture:hover{
-    filter: opacity(.8);
-}
+
 
 
 .gallery dialog{
@@ -209,4 +265,8 @@ dialog.some .dialog-img-wrapper{
     color: #fff;
     font-size: 14px;
     border-radius: 5px;
+}
+
+.warning-dialog{
+
 }

@@ -5,18 +5,14 @@ import axios from 'axios';
 
 
 
-const AlbumList = () => {
+const AlbumList = ({onFetch}) => {
 
   const componentStyle = {
     display: 'flex',
     gap: '20px',
-    border: '1px solid blue'
-    // fontSize: '16px',
-    // Add more styles as needed
   };
 
-  const {user} = useUserContext();
-  console.log('user here', user)
+  const {user, updateUser, logoutUser} = useUserContext();
   const [allAlbumsPopulated, setAllAlbumsPopulated] = useState([]);
 
 
@@ -29,11 +25,13 @@ const AlbumList = () => {
         }
       })
       .then((res)=>{
-        console.log('albums resp', res.data)
         setAllAlbumsPopulated(res.data);
+        onFetch(res.data);
       })
       .catch((err)=>{
-        console.log('albums error',err)
+        if(err.response.status === 401){
+          logoutUser();
+        }
       })
     }catch(err){
       console.log('albumssss error',err)

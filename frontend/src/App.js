@@ -1,10 +1,6 @@
 import {
-  Album,
   CallbackComponent,
-  Uploader,
-  Test,
-  AlbumGrid,
-  AlbumMode
+  Test
 } from "./components";
 import {
   Main,
@@ -26,6 +22,7 @@ const theme = createTheme({
   },
 });
 
+
 function App() {
   return (
     <UserProvider>
@@ -39,18 +36,22 @@ function App() {
                 element={<Studiospace />}
                 path="/accounts/:accountId/studiospace"
               />
-              {/* <Route element={<CreateAlbum/>} path='/accounts/:accountId/studiospace'/> */}
+            </Route>
+            <Route element={<PrivateRoute />}>
+              <Route
+                element={<SingleAlbumView />}
+                path="/albums/:albumId"
+              />
+            </Route>
+            <Route element={<PrivateRoute />}>
+              <Route
+                element={<CreateAlbum />}
+                path="/albums"
+              />
             </Route>
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/albums/:albumId" element={<SingleAlbumView />} />
-            <Route path="/albums" element={<CreateAlbum />} />
             <Route path="/test" element={<Test />} />
             <Route path="/auth" element={<AuthRequest />} />
-
-            <Route
-              path="/accounts/:accountId/studiospace"
-              element={<Studiospace />}
-            />
             <Route path="/callback" element={<CallbackComponent />} />
           </Routes>
         </ThemeProvider>

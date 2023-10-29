@@ -5,7 +5,7 @@
     align-items: center;
 } 
 
-.view-buttons-wrapper{
+.edit-buttons-wrapper{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,4 +37,24 @@
 .view-album-main{
     margin-top: 5px;
     overflow-y: auto;
+}
+
+.edit-buttons-wrapper .edit-button, 
+.edit-buttons-wrapper .save-button{
+    padding: 5px 15px;
+    outline: none;
+    border: none;
+    background: #262627;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 200;
+    border-radius: 5px;
+    margin: 10px 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    line-height: 5px;
+    /* justify-content: space-around; */
+    gap: 8px;
+
 }

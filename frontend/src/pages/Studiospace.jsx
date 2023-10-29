@@ -12,6 +12,13 @@ const Studiospace = () => {
   
   const { user, updateUser } = useUserContext();
   const [filterType, setFilterType] = useState("all");
+  const [allAlbums, setAllAlbums] = useState(null);
+
+  const handleAlbumsFetched = (albumData) => {
+    setAllAlbums(albumData);
+  }
+
+  console.log('allAlbums', allAlbums);
 
 
   const handleFilter = async (e) => {
@@ -101,17 +108,15 @@ const Studiospace = () => {
           </div>
           <div className="studio-analytics-wrapper">
             <div className="analytics analytics-album-count">
-              Album count
+              Album count: {allAlbums?.length}
             </div>
             <div className="analytics analytics-photos-count">
-              Photos count
+             Photos count: {allAlbums?.reduce((acc, album) => acc + (album.album.photos.length || 0), 0)}
             </div>
             <div className="analytics analytics-files-count">
               Files count
             </div>
           </div>
-
-        
         </div>
         <div className="studiospace-right">
           
@@ -132,12 +137,11 @@ const Studiospace = () => {
                         <option key={type} value={type} >{type}</option>
                       ))}
                     </select>
-                    {/* <button onClick={handleFilter}>Filter</button> */}
                   </div>
 
                 </div>
                 <div className="main-content">
-                        <AlbumList />
+                        <AlbumList onFetch={handleAlbumsFetched}/>
                 </div>
               </div>
           </div>
