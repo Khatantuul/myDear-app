@@ -106,7 +106,7 @@ export const fetchAllUserPhotos = async(req, res) => {
         err.status = 400;
         throw err;
        }
-       const photoObj = await getPresignedUrls(userId);
+       const photoObj = await getPresignedUrls(userId, null, false);
        setSuccessResponse(photoObj, res);
     }catch(err){
         setErrorResponse(err,res);
@@ -117,14 +117,16 @@ export const fetchAllAlbumPhotos = async(req, res) => {
     const userId = req.headers['user-id'];
     const albumId = req.headers['album-id'];
 
+
     try{
        if (!userId || !albumId){
         const err = new Error("UserId or AlbumId not received");
         err.status = 400;
         throw err;
        }
-       const photoObj = await getPresignedUrls(userId, albumId);
-       setSuccessResponse(photoObj, res);
+       const album = await albumServices.getAlbum(albumId);
+       const photoObj = await getPresignedUrls(userId, albumId, false);
+       setSuccessResponse({album,photoObj}, res);
     }catch(err){
         setErrorResponse(err,res);
     }

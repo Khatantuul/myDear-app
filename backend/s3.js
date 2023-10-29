@@ -63,6 +63,11 @@ export const getAllImageKeys = async (userId) => {
   };
 
 export const getAlbumImageKeys = async (userId, albumId, preview) => {
+
+    if(!userId || !albumId){
+      throw new Error('userId or albumId not received');
+    }
+
     const command = new ListObjectsV2Command({
       Bucket: bucket,
       Prefix: `${userId}/${albumId}`,
@@ -71,12 +76,14 @@ export const getAlbumImageKeys = async (userId, albumId, preview) => {
     try {
       const {Contents = []} = await s3.send(command);
 
+      console.log('is this causing issue')
       if(preview){
         const limited = Contents.slice(0,4);
         return limited.map(image => image.Key);
 
       }
 
+      console.log('contents', Contents)
       return Contents.map(image =>
          image.Key
         // ETag
@@ -128,12 +135,13 @@ export const getAlbumImageKeys = async (userId, albumId, preview) => {
 // }
 
 export const getPresignedUrls = async (userId, albumId, preview) => {
+
   try {
 
     let imageKeys = []
-    if(userId && albumId === null && preview === null){
+    if(userId && albumId === null && !preview){
       imageKeys = await getAllImageKeys(userId);
-    }else if(userId && albumId && preview === null){
+    }else if(userId && albumId && !preview){
       imageKeys = await getAlbumImageKeys(userId, albumId);
     }else if(userId && albumId && preview){
       imageKeys = await getAlbumImageKeys(userId, albumId, preview);
@@ -144,15 +152,10 @@ export const getPresignedUrls = async (userId, albumId, preview) => {
     for (const key of imageKeys) {
       const command = new GetObjectCommand({ Bucket: bucket, Key: key });
       const s3urlKey = key.split('/')[2];
-      // console.log('s3urlKey', s3urlKey);
 
       const photoDetails = await Photo.findOne({ url: `https://${bucket}.s3.amazonaws.com/${s3urlKey}` });
-      
-      // Assuming Photo.findOne returns null or an object with 'note' and 'tags'
       const { note, tags } = photoDetails || {};
-      
-      // console.log('photodetails', photoDetails);
-      
+            
       const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 900 });
 
       presignedUrls.push({

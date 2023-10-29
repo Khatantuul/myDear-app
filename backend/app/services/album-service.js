@@ -13,6 +13,12 @@ export const saveAlbum = async (albumInfo) => {
     }
 }
 
+// export const generateEtag = async (albumID) => {
+//     try{
+
+//     }
+// }
+
 export const addAlbumPhotos = async (albumID, photoID) => {
     try{
         const album = await Album.findById(albumID).exec();
@@ -36,7 +42,7 @@ export const getAlbums = async (creator) => {
 
 export const getAlbum = async (albumID) => {
     try{
-        const album = await Album.findById(albumID).populate({ path: 'photos'}).exec();
+        const album = await Album.findById(albumID).exec();
         return album;
     }catch(err){
         throw err;

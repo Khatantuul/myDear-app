@@ -7,7 +7,7 @@ import { isAuthenticated } from '../middlewares/authMiddleware.js';
 const route = (app) =>{
     app.use("/users",userRouter);
     app.use("/api/sessions",sessionRouter);
-    app.use("/albums",albumRouter);
+    app.use("/albums",isAuthenticated,albumRouter);
 }
 
 export default route;
