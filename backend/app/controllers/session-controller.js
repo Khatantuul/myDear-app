@@ -20,12 +20,9 @@ const setErrorResponse = (err,res) =>{
 
 export const getUserInfo = async (req, res) => {
   const user = req.session.user;
-  console.log('user genee', user)
 
   try{
     const foundUser = await User.findById(user.userID);
-    console.log('found user', foundUser)
-
     if (foundUser){
         setSuccessResponse(foundUser, res);
   }else{
@@ -42,10 +39,8 @@ export const getUserInfo = async (req, res) => {
 export const logout = async (req, res) => {
   try{
     const user = req.session.user;
-    console.log('user in logout session ', user)
    
     if (user){
-      console.log('its called')
       req.session.destroy((err)=>{
         if (err){
           setErrorResponse(err, res);
@@ -53,10 +48,7 @@ export const logout = async (req, res) => {
           setSuccessResponse({message: "Logout successful"}, res, true);
         }
       })
-    }else{
-      console.log("no user")
     }
-   
   }catch(err){
     setErrorResponse(err, res);
   }

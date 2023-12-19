@@ -103,7 +103,6 @@ export const exchange = async (authCode) => {
         })
         return accessT;
     }catch(err){
-        console.log("so error is here",err)
         throw err;
     }
 }

@@ -1,6 +1,6 @@
 import * as albumServices from './../services/album-service.js'
 import * as photoServices from './../services/photo-service.js'
-import { getPresignedUrls, uploadFile } from "../../s3.js";
+import { getPresignedUrls, uploadFile, deletePhotoFromS3 } from "../../s3.js";
 import multer from "multer";
 import sharp from "sharp";
 import fs from "fs";
@@ -53,16 +53,20 @@ export const createAlbum = async (req, res) => {
                 .jpeg({ quality: 90 })
                 .toBuffer();
               
-                const compressed = {...photoFile, buffer: compressedImageBuffer}
-                // console.log('photoFile', photoFile)
-                const s3url = await uploadFile(compressed, creator, album._id);
+              
 
                 if (photoInfo[idx].note || photoInfo[idx].tags){
-                    const photo = await photoServices.savePhoto({note: photoInfo[idx].note, tags: photoInfo[idx].tags,  s3url: s3url});
+                    let photo = await photoServices.savePhoto({note: photoInfo[idx].note, tags: photoInfo[idx].tags});
+                    const compressed = {...photoFile, buffer: compressedImageBuffer, photoId: photo._id}
+                    const s3url = await uploadFile(compressed, creator, album._id);
+                    photo = await photoServices.updatePhoto(photo._id, {s3url});
                     albumServices.addAlbumPhotos(album._id, photo._id);
                     return photo;
                 }else{
-                    const photo = await photoServices.savePhoto({s3url: s3url});
+                    let photo = await photoServices.savePhoto({});
+                    const compressed = {...photoFile, buffer: compressedImageBuffer, photoId: photo._id}
+                    const s3url = await uploadFile(compressed, creator, album._id);
+                    photo = await photoServices.updatePhoto(photo._id, {s3url});
                     albumServices.addAlbumPhotos(album._id, photo._id);
                     return photo;
                 }    
@@ -84,8 +88,7 @@ export const fetchAllAlbums = async(req, res) => {
         const preview = req.headers['preview'];
         const user = req.session.user;
         const albums = await albumServices.getAlbums(user.userID);
-
-        // console.log('albums', albums)
+        
         let populated = [];
         for (let album of albums){
             const r = await getPresignedUrls(user.userID,album._id,preview)
@@ -127,6 +130,30 @@ export const fetchAllAlbumPhotos = async(req, res) => {
        const album = await albumServices.getAlbum(albumId);
        const photoObj = await getPresignedUrls(userId, albumId, false);
        setSuccessResponse({album,photoObj}, res);
+    }catch(err){
+        setErrorResponse(err,res);
+    }
+}
+
+export const deletePhotoFromAlbum = async(req,res) => {
+    try {
+        const {albumId} = req.params;
+        const {photoId} = req.body;
+        const updatedAlbum = await albumServices.updateAlbumRemovePhoto(albumId, photoId);
+        await photoServices.deletePhoto(photoId);
+        await deletePhotoFromS3(req.session.user.userID, albumId, photoId);
+        setSuccessResponse(updatedAlbum, res);
+
+    } catch (error) {
+        setErrorResponse(error,res);
+    }
+}
+
+export const deleteAlbum = async(req,res) => {
+    const {albumId} = req.params;
+    try{
+        await albumServices.deleteAlbum(albumId);
+        setSuccessResponse({"message": "Successfully deleted"}, res);
     }catch(err){
         setErrorResponse(err,res);
     }

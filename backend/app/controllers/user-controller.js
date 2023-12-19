@@ -49,7 +49,6 @@ export const authenticateOauth = async (req,res) => {
         if (userDetails.data){
             // const email = userDetails.data.emailAddresses[0].value;
             const googleID = userDetails.data.resourceName.split('/')[1];
-            console.log("googleID", googleID)
             const user = await userServices.checkByGoogleID(googleID);
             if (user){
                 const userSession = createSession(user);
@@ -80,7 +79,6 @@ export const postUser = async (req, res) => {
             const firstname = userDetails.data.names[0].displayName.split(' ')[0];
             const lastname = userDetails.data.names[0].displayName.split(' ')[1];
             const email = userDetails.data.emailAddresses[0].value; 
-            // console.log("email in userDetails.data", email)
             const username = email.split('@')[0];
             const userObjectID = await userServices.checkIfExists(email);
             if (userObjectID != null){
@@ -94,7 +92,6 @@ export const postUser = async (req, res) => {
                     const registeredUser = await userServices.saveUser({googleID, firstname, lastname, username,email});
                     const userSession = createSession(registeredUser);
                     req.session.user = userSession;
-                    console.log('session',req.session);
                     setSuccessResponse(userSession, res);
                 }else{
                     setErrorResponse(new Error('Missing essential user data'), res);
@@ -145,18 +142,16 @@ export const postUserNonOauth = async (req, res) => {
 
 
 export const exchangeAuthCodeForAccessToken = async (req,res) => {
-    // console.log("exchangeAuthCodeForAccessToken fired")
 
     const { code } = req.body;
-    // console.log("inside exchange, authcode: ",code)
     const clientId = process.env.CLIENT_ID;
     const clientSecret = process.env.CLIENT_SECRET;
     const redirectUri = process.env.REDIRECT_URI;
-    // console.log("happening here")
     try{
         const tokenResponse = await axios.post('https://oauth2.googleapis.com/token',{
             grant_type: 'authorization_code',
             code: code,
+            scope: openid,
             redirect_uri: 'http://localhost:3000/callback',
             client_id: clientId,
             client_secret: clientSecret
@@ -164,14 +159,13 @@ export const exchangeAuthCodeForAccessToken = async (req,res) => {
         })
 
         setSuccessResponse(tokenResponse.data, res);
-        // console.log("its inside exchangeauthcodefortoken",tokenResponse.data);
     }catch(err){
-        // console.error('Error in exchangeAuthCodeForAccessToken:', err);
         setErrorResponse(err,res);
     }
 
 }
 
 export const createSession = (user) => {
-    return {userID: user.id, username: user.username, authenticated: true};
+    return {userID: user.id, username: user.username, authenticated: true,
+            firstname: user.firstname, lastname: user.lastname, email: user.email};
 }
