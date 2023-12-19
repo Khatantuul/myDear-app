@@ -26,14 +26,12 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs, edit, handleE
       const openImage = (e,index) => {
         handleOrientation(e);
         const clicked = photos[index]
-        console.log('clecked', clicked)
         setSinglePhoto({...clicked, index: index});
         setModal(true);
       }
       const openImageObj = (e,index) => {
         handleOrientation(e);
         const clicked = imageObjs[index]
-        console.log('clecked', clicked)
         setSinglePhoto({...clicked, index: index});
         setModal(true);
         setFlippable(true);
@@ -83,7 +81,6 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs, edit, handleE
 
       const handleSaveAndClose = () => {
         setModal(false);
-        console.log('singlePhoto', singlePhoto);
         const photo = {...singlePhoto, ...photoValues};
         handleOnSave(singlePhoto.index, photo);
       }
@@ -97,7 +94,6 @@ const AlbumGrid = ({photos, handleOnSave, handleRemove, imageObjs, edit, handleE
 
       const onDeleteClick = (e, idx) => {
         e.stopPropagation();
-        console.log('idx', idx)
         setShowWarningIndex(idx);
      
       }

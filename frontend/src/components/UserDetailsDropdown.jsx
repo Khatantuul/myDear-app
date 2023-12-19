@@ -10,7 +10,6 @@ const UserDetailsDropdown = () => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const navigate = useNavigate();
     const ref = useRef(null);
-
     useEffect(() => {
         const handleOutsideClick = (e) => {
            if(ref.current && !ref.current.contains(e.target)){
@@ -31,24 +30,21 @@ const UserDetailsDropdown = () => {
       };
     
       const logout = async() => {
-        console.log("getting clicked")
         try{
           const response = await axios.delete('http://localhost:9000/api/sessions',{
             withCredentials: true
           })
           .then((res)=>{
-            console.log('getting clicked')
-            console.log('so logging out', res.data)
             logoutUser();
             localStorage.removeItem('user');
             navigate('/login');
           })
           .catch((err)=>{
-            console.log('logout error',err)
+            throw err;
           })
     
         }catch (err){
-          console.log('logoutttt error',err)
+          throw err;
         }
       }
 
@@ -57,7 +53,7 @@ const UserDetailsDropdown = () => {
     <div className="user-details-wrapper">
     <button onClick={openMenu}>
       <div className="user-details">
-        <span>KB</span>
+        <span>{user.firstName[0] + '' + user.lastName[0]}</span>
       </div>
     </button>
 {/* {isDropdownVisible && ( */}
@@ -66,11 +62,11 @@ const UserDetailsDropdown = () => {
       <div className="user-settings-account-info-wrapper">
         {/* <img src='/assets/user.jpeg' alt='user'/> */}
         <div className="user-details">
-          <span>KB</span>
+        <span>{user.firstName[0] + '' + user.lastName[0]}</span>
         </div>
         <div className="user-settings-account-info">
-          <span>Khatantuul Batbold</span>
-          <span>khatnabb@gmail.com</span>
+          <span>{user.firstName + ' ' + user.lastName}</span>
+          <span>{user.email}</span>
         </div>
 
       </div>

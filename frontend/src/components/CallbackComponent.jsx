@@ -25,8 +25,8 @@ const CallbackComponent = () => {
           withCredentials: true
         })
         .then((res)=>{
-          console.log('res.data in callback', res.data);
-          updateUser({ username: res.data.username, authenticated: true, userID: res.data.userID});
+          updateUser({ username: res.data.username, authenticated: true, userID: res.data.userID,
+                      email: res.data.email, firstName: res.data.firstname, lastName: res.data.lastname,});
           setResponseData(res.data);
           navigate(`/accounts/${res.data.userID}/studiospace`);
         })
@@ -43,13 +43,13 @@ const CallbackComponent = () => {
     };
       const exchangeCodeForAccessTokenForLogin = async (authC) => {
         try {
-          console.log("so login function is triggered")
-        const response = await axios.post('http://localhost:9000/users/oauth/login', { authC },{
-          withCredentials: true
+        
+          const response = await axios.post('http://localhost:9000/users/oauth/login', { authC },{
+            withCredentials: true
         })
         .then((res)=>{
-          console.log('res.data in callback', res.data);
-          updateUser({ username: res.data.username, authenticated: true, userID: res.data.userID});
+          updateUser({ username: res.data.username, authenticated: true, userID: res.data.userID,
+            email: res.data.email, firstName: res.data.firstname, lastName: res.data.lastname,});
           setResponseData(res.data);
           navigate(`/accounts/${res.data.userID}/studiospace`);
         })
@@ -64,15 +64,12 @@ const CallbackComponent = () => {
     
     const getQueryParams = (param) => {
       const params = new URLSearchParams(window.location.search);
-      console.log('authcode in the front', params.get(`${param}`));
       return params.get(`${param}`);
     };
     
     const authCode = getQueryParams('code');
-    console.log('authcode in callback', authCode)
     const stateParam = getQueryParams('state');
     const state = stateParam ? JSON.parse(stateParam) : null;
-    console.log('state in callback', state);
     if (authCode && state === null) {
       exchangeCodeForAccessToken(authCode);
     }

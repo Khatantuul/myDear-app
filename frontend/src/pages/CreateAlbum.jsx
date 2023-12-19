@@ -5,14 +5,13 @@ import {Camera, Description} from '@mui/icons-material';
 import axios from 'axios';
 import { useUserContext } from './../context/usercontext';
 import {Link, useNavigate} from 'react-router-dom';
+import { toast } from 'sonner';
 
 
 
 
 const CreateAlbum = () => {
     const { user, updateUser } = useUserContext();
-    console.log('user', user)
-
     const [title, setTitle] = useState('New Album');
     const [onFileSelected, setOnFileSelected] = useState(false);
     const [selectedPhotos, setSelectedPhotos] = useState([]);
@@ -110,6 +109,12 @@ const handleOnSave = (index,values) => {
 
     const handleUpload = async (e)=> {
         e.preventDefault();
+
+        if (values.title.trim() === ""){
+            toast.error("Please set an album title!")
+            return;
+        }
+
         // const photosFD = new FormData();
         if (selectedPhotos.length > 10){
             setInvalid(true);
@@ -144,10 +149,10 @@ const handleOnSave = (index,values) => {
                     // navigate(`/albums/${albumId}`);
                 })
                 .catch((err)=>{
-                    console.log("something bad happened", err)
+                    throw err;
                 })
         }catch(err){
-            console.log(err);
+            throw err;
         }
     }
 

@@ -40,7 +40,8 @@
 }
 
 .edit-buttons-wrapper .edit-button, 
-.edit-buttons-wrapper .save-button{
+.edit-buttons-wrapper .save-button,
+.edit-buttons-wrapper .dlt-button{
     padding: 5px 15px;
     outline: none;
     border: none;
@@ -57,4 +58,15 @@
     /* justify-content: space-around; */
     gap: 8px;
 
+}
+
+.delete-dialog{
+    margin: auto ;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+
+.delete-dialog::backdrop{
+    background: hsla(0, 0%, 0%, .5);
 }

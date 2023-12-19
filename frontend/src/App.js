@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { UserProvider } from "./context/usercontext";
 import PrivateRoute from "./util/PrivateRoute";
 import SingleAlbumView from "./pages/SingleAlbumView";
+import {Toaster} from 'sonner';
+import { useEffect } from "react";
 
 const theme = createTheme({
   typography: {
@@ -23,13 +25,21 @@ const theme = createTheme({
 });
 
 
+
+
 function App() {
+
+  const userExists = window.localStorage.getItem("user");
+  const accountId = userExists ? JSON.parse(userExists)?.userID : null;
+
+
   return (
     <UserProvider>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
+        <Toaster richColors/>
           <Routes>
-            <Route path="/" element={<Main />} />
+            <Route path="/" element={accountId ? (<Navigate to={`/accounts/${accountId}/studiospace`} />) : (<Main />)} />
             <Route path="/login" element={<Login />} />
             <Route element={<PrivateRoute />}>
               <Route

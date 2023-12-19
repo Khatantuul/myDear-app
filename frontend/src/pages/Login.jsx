@@ -51,7 +51,6 @@ const Test = () => {
             })
 
             .then((res)=>{
-                console.log(res.data);
                 updateUser({ username: res.data.username, authenticated: true, userID: res.data.userID});
                 navigate(`/accounts/${res.data.userID}/studiospace`);
             })

@@ -8,6 +8,7 @@ import axios from 'axios';
 
 
 
+
 const Studiospace = () => {
   
   const { user, updateUser } = useUserContext();
@@ -18,7 +19,7 @@ const Studiospace = () => {
     setAllAlbums(albumData);
   }
 
-  console.log('allAlbums', allAlbums);
+
 
 
   const handleFilter = async (e) => {

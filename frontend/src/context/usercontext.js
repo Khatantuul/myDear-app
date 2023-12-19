@@ -27,7 +27,6 @@ export const UserProvider = ({ children }) => {
   const updateUser = (newUserData) => {
     setUser((prevUser) => {
       const updatedUser = { ...prevUser, ...newUserData }
-      console.log('updatedUser in context', updatedUser)
       // localStorage.setItem('user', JSON.stringify(updatedUser))
       return updatedUser;
     });
