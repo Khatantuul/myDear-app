@@ -11,11 +11,13 @@ import { toast } from 'sonner';
 
 
 const SingleAlbumView = ({ match }) => {
+  
   const { user, updateUser } = useUserContext();
 
   const { albumId } = useParams();
 
   const [imageObjs, setImageObjs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [originalImageObjs, setOriginalImageObjs] = useState(imageObjs);
   const [albumInfo, setAlbumInfo] = useState({});
   const [edit, setEdit] = useState(false);
@@ -26,39 +28,48 @@ const SingleAlbumView = ({ match }) => {
   const [photosToDelete, setPhotosToDelete] = useState([]);
   const ref = useRef(null);
   const [modal, setModal] = useState(false);
+ 
 
 
 
-
-const hasRun = useRef(false);
-
+  const hasRun = useRef(false);
+  const abortControllerRef = useRef(null);
   useEffect(() => {
-
-    if (!hasRun.current){
     const fetchImages = async () => {
-     try{
-        const response = await axios.get(`http://localhost:9000/albums/${albumId}`,{
+      abortControllerRef.current = new AbortController();
+  
+      try {
+        const response = await axios.get(`http://localhost:9000/albums/${albumId}`, {
           withCredentials: true,
-            headers: {
-                'User-ID': user.userID,
-                'Album-ID': albumId
-            }
-        })
-        .then(res=>{
-
-          const {photoObj} = res.data;
-          setImageObjs(photoObj);
-          setOriginalImageObjs(JSON.parse(JSON.stringify(photoObj))); 
-          setAlbumInfo(res.data.album)
-        })
-     }catch(err){
-          console.log('err in the front',err)
-     }
+          signal: abortControllerRef.current.signal, 
+          headers: {
+            'User-ID': user.userID,
+            'Album-ID': albumId,
+          },
+        });
+  
+        const { photoObj } = response.data;
+        setImageObjs(photoObj);
+        setOriginalImageObjs(JSON.parse(JSON.stringify(photoObj)));
+        setAlbumInfo(response.data.album);
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          console.log('Request aborted.');
+          return;
+        }
+        console.error('Error fetching album:', err);
+      } finally {
+        setIsLoading(false);
+      }
     };
-
-    fetchImages();
-    hasRun.current = true;
-  }
+      
+    if (hasRun.current) {
+      fetchImages();
+    }
+ 
+    return () => {
+      abortControllerRef.current?.abort();
+      hasRun.current = true;}
   }, []);
 
   const handleSwitch = () => {
@@ -154,6 +165,8 @@ const hasRun = useRef(false);
   const handleDeleteCancel = () => {
     setModal(false);
   }
+
+  
   
 
   return (
@@ -192,6 +205,8 @@ const hasRun = useRef(false);
                     </div>
                     <span>Delete Album</span>
                   </button>
+    
+  
               </div>
             <div className="create-album-header-right">
               <UserDetailsDropdown/>
@@ -199,6 +214,7 @@ const hasRun = useRef(false);
             </div>
         </div>
         <div className="view-album-main">
+          {isLoading && <div>Loading.....</div>}
         <AlbumGrid imageObjs={imageObjs} edit={edit} handleEditRemove={handleRemove} />
         {discardDialog && 
         <div className="discard-changes-dialog">
