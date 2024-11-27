@@ -1,0 +1,39 @@
+.footer-section{
+    padding: 40px 32px;
+    background: #fafafa;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.footer-content{
+    display: grid;
+    gap: 0px 24px;
+    grid-template-columns: repeat(12, 64px);
+    /* grid-auto-rows: minmax(200px, auto); */
+}
+
+.catchphrase-wrapper{
+    grid-column: 2 / 6;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 6px;
+    /* text-align: center; */
+}
+
+.catchphrase-wrapper span{
+    line-height: 30px;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.brand-wrapper{
+    grid-column: 9 / 12;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 6px;
+    /* text-align: right; */
+}
+

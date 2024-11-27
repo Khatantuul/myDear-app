@@ -1,0 +1,72 @@
+.album-pages{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between; 
+    align-items: center;
+} 
+
+.edit-buttons-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-buttons-wrapper .grid,
+.view-buttons-wrapper .album{
+    width: 80px;
+    border: 0px;
+    background-color: #e3e3e3;
+    outline: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    min-height: 32px;
+    font-size: 14px;
+    line-height: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.view-buttons-wrapper .grid {
+    border-radius: 4px 0px 0px 4px;
+}
+.view-buttons-wrapper .album {
+    border-radius: 0px 4px 4px 0px;
+}
+
+.view-album-main{
+    margin-top: 5px;
+    overflow-y: auto;
+}
+
+.edit-buttons-wrapper .edit-button, 
+.edit-buttons-wrapper .save-button,
+.edit-buttons-wrapper .dlt-button{
+    padding: 5px 15px;
+    outline: none;
+    border: none;
+    background: #262627;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 200;
+    border-radius: 5px;
+    margin: 10px 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    line-height: 5px;
+    /* justify-content: space-around; */
+    gap: 8px;
+
+}
+
+.delete-dialog{
+    margin: auto ;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+
+.delete-dialog::backdrop{
+    background: hsla(0, 0%, 0%, .5);
+}
