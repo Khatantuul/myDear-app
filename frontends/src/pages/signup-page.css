@@ -1,0 +1,295 @@
+@media screen and (max-width: 990px) {
+    .right-section {
+      display: none;
+    }
+  }
+@media screen and (min-width: 720px) {
+    .signup-form-wrapper {
+      max-width: 542px;
+    }
+  }
+
+
+.form-container{
+    height: 100vh;
+    display: flex;
+    color: rgb(76, 76, 76);
+}
+
+.signin-section{
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-column: 2 / 2;
+    grid-row: 1 / 2;
+}
+
+.right-section{
+  background-color: rgb(19, 19, 19);
+  min-height: 90vh;
+  width: 100%;
+  flex: 1 1 0%;
+}
+
+.rightsection-content-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+    /* border: 1px solid green; */
+    height: 100%;
+}
+
+.rightsection-content-wrapper h1{
+    font-size: 36px;
+    margin: 0px 0px 35px;
+    width: 366px;
+    font-weight: 400;
+    line-height: 44px;
+    text-align: center;
+    color: #fff;
+}
+
+.rightsection-content-wrapper img{
+    width: 400px;
+    height: auto;
+    border-radius: 10px;
+    /* box-shadow: 7px 7px 2px #ccc; */
+}
+
+.left-section{
+    min-height: 90vh;
+    height: 100%;
+    width: 100%;
+    flex: 1 1 0%;
+    border-radius: 16px 0px 0px 16px;
+    margin-left: -16px;
+    overflow: auto;
+    background-color: #fff;    
+    display: grid;
+    grid-template-columns: [first] auto [second] auto;
+    grid-template-rows: [first] 55px [second] auto [third] 55px;
+    
+}
+
+.signin-link-text{
+    padding-right: 5px;
+    font-size: 14px;
+    color: rgb(76, 76, 76);
+}
+
+.signin-link-aTag{
+    display: inline-block;
+    line-height: 11px;
+    height: 28px;
+    padding: 8px 12px 6px;
+    color: rgb(38, 38, 39);
+    border-radius: 2px;
+    border: 1px solid currentColor;
+    vertical-align: middle; 
+    font-size: 12px;
+    width: auto;
+    text-decoration: none;
+}
+
+.signup-page-return-wrapper{
+    display: flex;
+    align-items: center;
+}
+
+.signup-form-wrapper{
+    /* width: 400px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    grid-row: 2/2;
+    grid-column: span 2;
+    justify-self: center;
+}
+
+.signup-content{
+    padding: 30px 72px;
+}
+
+.signup-form-wrapper .signup-content h2{
+    font-weight: 200;
+    font-size: 24px;
+    line-height: 36px;
+    color: rgb(115, 115, 115);
+    margin-bottom: 34px;
+    text-align: center;
+    
+}
+
+.signup-oauth-wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.signup-oauth-google-link-button{
+    display: block;
+    color: #5e5e5e;
+    border-radius: 3px;
+    background: url('./../../assets/icons8-google-30.png' ) 
+        no-repeat 10px, linear-gradient(90deg, #ffffff 50px, #fbfbfb 0px);
+    border: 1px solid #c3c3c3;
+    width: 70%;
+    height: 40px;
+    font-size: 16px;
+    padding-left: 65px;
+    line-height: 2.4;
+    cursor: pointer;
+}
+.signup-oauth-divider-wrapper{
+    background-color: rgb(187, 187, 187);
+    height: 1px;
+    margin: 30px 0px;
+    text-align: center;
+    width: 70%;
+}
+
+.signup-oauth-divider-text{
+    position: relative;
+    background-color: #fff;
+    top: -0.6em;
+    padding: 0px 15px;
+    color: rgb(115, 115, 115);
+    font-size: 14px;
+}
+
+.signup-button-wrapper{
+    width: 70%;
+
+}
+
+.signup-button{
+    display: block;
+    height: 40px;
+    width: 100%;
+    border: none;
+    line-height: 28px;
+    background: #262627;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.signup-form-fieldset-wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.signup-form-content{
+    padding: 20px 72px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+ 
+}
+
+.signup-form-email-field-wrapper,
+.signup-form-password-field-wrapper,
+.signup-form-firstname-field-wrapper,
+.signup-form-lastname-field-wrapper{
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.signup-email-input,
+.signup-password-input,
+.signup-firstname-input,
+.signup-lastname-input
+{
+    display: inline-block;
+    height: 40px;
+    border: 1px solid #bbb;
+    outline: none;
+    border-radius: 3px;
+    width: 100%;
+    color: #5e5e5e;
+    background: transparent;
+    padding: 6px 14px;
+}
+
+.signup-create-button-wrapper{
+    width: 70%;
+}
+.signup-create-button{
+    display: block;
+    height: 40px;
+    width: 100%;
+    border: none;
+    line-height: 28px;
+    background: #262627;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    
+}
+
+.signup-error-message{
+    color: #d93934;
+    font-weight: 400;
+    padding-left: 18px;
+    position: relative;
+    padding-top: 8px;
+}
+
+.signup-error-message::before{
+    content: "\26A0";
+    font-size: 16px; 
+    position: absolute;
+    left: 0;
+    top: 7px;
+    vertical-align: top;
+}
+
+.signup-form-validation-error-wrapper,
+.signup-form-user-exists-error-wrapper{
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    position: relative;
+    padding: 12px 18px 12px 60px;
+    margin-bottom: 15px;
+    display: none;
+}
+.signup-form-validation-error-wrapper[invalid="true"],
+.signup-form-user-exists-error-wrapper[invalid="true"]{
+    display: block;
+}
+
+.signup-form-validation-error-wrapper::before,
+.signup-form-user-exists-error-wrapper::before{
+    background-color: #e34843;
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: -1px;
+    width: 36px;
+    content: "";
+    /* vertical-align: top;     */
+}
+
+.signup-form-validation-error-wrapper span.error-icon::before,
+.signup-form-user-exists-error-wrapper span.error-icon::before{
+    content: "\26A0";
+    color: #fff;
+    font-size: 16px;
+    position: absolute;
+    left: 9px;
+    top: 22px;
+}
