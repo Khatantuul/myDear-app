@@ -21,6 +21,7 @@
 }
 .create-album-header-left {
   display: flex;
+  align-items: center;
   font-size: 18px;
 }
 
