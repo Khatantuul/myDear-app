@@ -8,6 +8,7 @@ const AlbumList = ({ onFetch }) => {
     display: "flex",
     gap: "30px",
     "margin-top": "30px",
+    "flex-wrap": 'wrap'
   };
 
   const { user, updateUser, logoutUser } = useUserContext();
