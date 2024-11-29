@@ -1,179 +1,171 @@
-.main-container{
-    width: 100vw;
-    height: 100vh;
-    
+.main-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "navbar navbar"
+    "sidebar main";
 }
 
-.create-album-wrapper{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+.create-album-header {
+  grid-area: navbar;
+  background-color: orange;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  background-color: #fff;
+  padding: 10px;
+  top: 0;
+  position: sticky;
+  z-index: 1000;
+}
+.create-album-header-left {
+  display: flex;
+  font-size: 18px;
 }
 
-.create-album-header{
-    height: 48px;
-    width: 100%;
-    padding: 35px 20px;
-    display: flex;
-    align-items: center;
-    box-shadow: rgba(0, 0, 0, 0.07) 0px -1px inset;
-    justify-content: space-between;
+.header-left-first {
+  display: flex;
+  gap: 10px;
+  margin-right: 10px;
+}
+.create-album-header-buttons-wrapper {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 10px;
+}
+.create-album-header-right .create-album-publish {
+  display: inline-block;
+  line-height: 11px;
+  padding: 12px 20px;
+  color: #fff;
+  border-radius: 5px;
+  border: 1px solid currentColor;
+  font-size: 14px;
+  width: auto;
+  text-decoration: none;
+  background-color: #262627;
 }
 
-.create-album-header-left{
-    /* width: 400px; */
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
+.create-album-add-more-button-wrapper button {
+  border: 1px solid currentColor;
+  padding: 12px 20px;
+  border-radius: 5px;
+  outline: none;
+  color: #fff;
+  background-color: #262627;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 12px;
 }
 
-.header-left-first{
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-right: 10px;
-
+.header-back-studio {
+  text-decoration: none;
+  color: #737373;
+}
+.create-album-main {
+  grid-area: sidebar;
+  min-height: calc(100vh - 58px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(25, 25, 25, 0.06);
+  top: 58px;
+  position: sticky;
+  align-self: start;
 }
 
-.create-album-header-right{
-    padding-right: 10px;
+.create-album-left {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  width: 98%;
+  height: 98%;
 }
-
-.create-album-header-buttons-wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.create-album-header-right .create-album-publish{
-    display: inline-block;
-    line-height: 11px;
-    /* height: 28px; */
-    padding: 12px 20px;
-    color: #fff;
-    border-radius: 5px;
-    border: 1px solid currentColor;
-    /* vertical-align: middle;  */
-    font-size: 14px;
-    width: auto;
-    text-decoration: none;
-    background-color: #262627;
-
-}
-
-.create-album-add-more-button-wrapper button{
-    border: 1px solid currentColor;
-    padding: 12px 20px;
-    border-radius: 5px;
-    outline: none;
-    color: #fff;
-    background-color:#262627;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 12px;
-}
-
-.header-back-studio{
-    text-decoration: none;
-    color: #737373;
-
-}
-
-.create-album-main{
-    display: flex;
-    height: 100%;
-}
-
-.create-album-left{
-    display: flex;
-    flex-direction: column;
-    border: 1px solid green;
-    width: 300px;
-    height: 100%;
-    /* justify-content: space-around; */
-}
-
 
 .left-menu-album-title,
 .left-menu-album-tags,
-.left-menu-album-desc
-{
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    
+.left-menu-album-desc {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin: 0 10px 10px 10px;
+  border-color: #6366f1;
+  box-shadow: 1px 1px 1px rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+  background-color: #fff;
 }
 
-.left-menu-album-title input{
-    padding: 5px;
-    outline: none;
+.left-menu-album-title input {
+  padding: 7px;
+  outline: none;
+  font-size: 12px;
+  border-radius: 5px;
+  border: 1px solid #a6a6a6;
 }
 
 .left-menu-album-title span,
 .left-menu-album-tags span,
-.left-menu-album-desc span{
-    font-weight: 600;
-    margin-bottom: 3px;
-    display: flex;
-    align-items: center;
+.left-menu-album-desc span {
+  font-weight: 600;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
 }
 
-
-.left-menu-album-desc textarea{
-    resize: none;
-    padding: 9px;
-    border-radius: 5px;
+.left-menu-album-desc textarea {
+  resize: none;
+  padding: 7px;
+  border-radius: 5px;
+  border: 1px solid #a6a6a6;
 }
 
-.create-album-right{
-    background: #fafafa;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+.create-album-left-analytics {
+  background-color: green;
 }
 
-
-
-.maxUpload-error-wrapper{
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    position: relative;
-    padding: 12px 18px 12px 60px;
-    margin: 10px auto;
-    display: none;
-
+.create-album-right {
+  grid-area: main;
 }
 
-.maxUpload-error-wrapper[invalid="true"]{
-    display: block;
+.create-album-right {
+  background: #fafafa;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
-.maxUpload-error-wrapper::before{
-    background-color: #e34843;
-    position: absolute;
-    top: -1px;
-    bottom: -1px;
-    left: -1px;
-    width: 36px;
-    content: "";
-    /* vertical-align: top;     */
+.maxUpload-error-wrapper {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  position: relative;
+  padding: 12px 18px 12px 60px;
+  margin: 10px auto;
+  display: none;
 }
 
-.maxUpload-error-wrapper span.error-icon::before{
-    content: "\26A0";
-    color: #fff;
-    font-size: 16px;
-    position: absolute;
-    left: 9px;
-    top: 12px;
+.maxUpload-error-wrapper[invalid="true"] {
+  display: block;
 }
 
+.maxUpload-error-wrapper::before {
+  background-color: #e34843;
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  width: 36px;
+  content: "";
+}
 
-
-
-
-
+.maxUpload-error-wrapper span.error-icon::before {
+  content: "\26A0";
+  color: #fff;
+  font-size: 16px;
+  position: absolute;
+  left: 9px;
+  top: 12px;
+}
