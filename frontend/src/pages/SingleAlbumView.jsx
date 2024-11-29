@@ -16,7 +16,6 @@ const SingleAlbumView = () => {
   const { albumId } = useParams();
 
   const location = useLocation();
-  console.log('jey ehyeye',location.state?.initialImages);
   const [imageObjs, setImageObjs] = useState(location.state?.initialImages || []);
   const [isLoading, setIsLoading] = useState(false);
   const [originalImageObjs, setOriginalImageObjs] = useState(imageObjs);
@@ -24,16 +23,12 @@ const SingleAlbumView = () => {
   const [edit, setEdit] = useState(false);
   const [changesMade, setChangesMade] = useState(false);
   const [discardDialog, setDiscardDialog] = useState(false);
-  // const [selectedPhotos, setSelectedPhotos] = useState([]);
   const discardModalRef = useRef(null);
   const [photosToDelete, setPhotosToDelete] = useState([]);
   const ref = useRef(null);
   const [modal, setModal] = useState(false);
  
 
-
-
-  // const hasRun = useRef(false);
   const abortControllerRef = useRef(null);
   useEffect(() => {
     const fetchImages = async () => {
@@ -85,11 +80,6 @@ const SingleAlbumView = () => {
     );
     setChangesMade(true);
   };
-
-  // useEffect(() => {
-  //   console.log('lol',imageObjs.map(item => item));
-  // }, [imageObjs]); 
-  
 
   useEffect(() => {
     if (discardDialog) {
@@ -170,19 +160,18 @@ const SingleAlbumView = () => {
   
 
   return (
-    <div className="main-container">
-    <div className="create-album-wrapper">
-        <div className="create-album-header">
-            <div className="create-album-header-left">
-                <div className="header-left-first">
-                    <div className="create-album-back-studio">
-                         <Link to={`/accounts/${user.userID}/studiospace`} className="header-back-studio">
+    <div className="single-main-container">
+       <div className="single-album-header">
+            <div className="single-album-header-left">
+                <div className="single-header-left-first">
+                    <div className="single-album-back-studio">
+                         <Link to={`/accounts/${user.userID}/studiospace`} className="single-header-back-studio">
                                     My Studio
                                 </Link>
                     </div>
                     <span>/</span>
                 </div>
-                <div className="header-left-second">
+                <div className="single-header-left-second">
                     <span>{albumInfo?.title}</span>
                 </div>
             </div>
@@ -203,16 +192,17 @@ const SingleAlbumView = () => {
                     <div className="dlt-button-icon">
                       <DeleteForever/>
                     </div>
-                    <span>Delete Album</span>
+                    <span className="multi-line-text">Delete Album</span>
                   </button>
-    
-  
+                
               </div>
-            <div className="create-album-header-right">
-              <UserDetailsDropdown/>
+            <div className="single-album-header-right">
+               <UserDetailsDropdown/>
              
             </div>
         </div>
+    <div className="single-album-wrapper">
+       
         <div className="view-album-main">
           {isLoading && <div>Loading.....</div>}
         <AlbumGrid imageObjs={imageObjs} edit={edit} handleEditRemove={handleRemove} />

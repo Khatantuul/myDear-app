@@ -1,72 +1,144 @@
-.album-pages{
-    display: flex;
-    /* flex-direction: column; */
-    justify-content: space-between; 
-    align-items: center;
-} 
+.single-main-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "navbar"
+    "main";
+}
+.single-album-header {
+  grid-area: navbar;
+  background-color: orange;
+  display: grid;
+  grid-template-columns: 300px 1fr auto;
+  background-color: #fff;
+  padding: 10px;
+  top: 0;
+  position: sticky;
+  z-index: 1000;
+  align-items: center;
+}
 
-.edit-buttons-wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.single-album-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.single-album-header-left {
+  display: flex;
+  font-size: 18px;
+}
+
+.single-header-left-first {
+  display: flex;
+  gap: 10px;
+  margin-right: 10px;
+}
+
+.single-header-back-studio {
+  text-decoration: none;
+  color: #737373;
+}
+
+.album-pages {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-buttons-wrapper {
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }
 
 .view-buttons-wrapper .grid,
-.view-buttons-wrapper .album{
-    width: 80px;
-    border: 0px;
-    background-color: #e3e3e3;
-    outline: none;
-    cursor: pointer;
-    padding: 8px 12px;
-    min-height: 32px;
-    font-size: 14px;
-    line-height: 10px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    
+.view-buttons-wrapper .album {
+  width: 80px;
+  border: 0px;
+  background-color: #e3e3e3;
+  outline: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  min-height: 32px;
+  font-size: 14px;
+  line-height: 10px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 .view-buttons-wrapper .grid {
-    border-radius: 4px 0px 0px 4px;
+  border-radius: 4px 0px 0px 4px;
 }
 .view-buttons-wrapper .album {
-    border-radius: 0px 4px 4px 0px;
+  border-radius: 0px 4px 4px 0px;
 }
 
-.view-album-main{
-    margin-top: 5px;
-    overflow-y: auto;
+.view-album-main {
+  margin-top: 5px;
+  overflow-y: auto;
+  min-height: calc(100vh - 82px);
+  background-color: #f7f7f6;
 }
 
-.edit-buttons-wrapper .edit-button, 
+.edit-buttons-wrapper .edit-button,
 .edit-buttons-wrapper .save-button,
-.edit-buttons-wrapper .dlt-button{
-    padding: 5px 15px;
-    outline: none;
-    border: none;
-    background: #262627;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 200;
-    border-radius: 5px;
-    margin: 10px 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    line-height: 5px;
-    /* justify-content: space-around; */
-    gap: 8px;
-
+.edit-buttons-wrapper .dlt-button {
+  padding: 5px 15px;
+  outline: none;
+  border: none;
+  background: #262627;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 200;
+  border-radius: 5px;
+  margin: 10px 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  line-height: 5px;
+  /* justify-content: space-around; */
+  gap: 8px;
 }
 
-.delete-dialog{
-    margin: auto ;
-    border: none;
-    border-radius: 5px;
-    outline: none;
+.delete-dialog {
+  margin: auto;
+  border: none;
+  border-radius: 5px;
+  outline: none;
 }
 
-.delete-dialog::backdrop{
-    background: hsla(0, 0%, 0%, .5);
+.delete-dialog::backdrop {
+  background: hsla(0, 0%, 0%, 0.5);
+}
+
+@media (max-width: 800px) {
+  .multi-line-text {
+    white-space: normal;
+    text-align: center;
+    word-break: break-word;
+    line-height: 12px;
+  }
+}
+
+@media (max-width: 700px) {
+  .single-album-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "navbar navbar-left"
+      "buttons buttons";
+  }
+
+  .single-album-header .single-album-header-left {
+    grid-area: navbar;
+    padding: 8px;
+  }
+
+  .single-album-header .edit-buttons-wrapper {
+    grid-area: buttons;
+    justify-content: start;
+  }
 }
