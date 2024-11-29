@@ -65,7 +65,7 @@ const Studiospace = () => {
             </div>
           </div>
           <div className="header-title-wrapper">
-            <ModeNight />
+            {/* <ModeNight /> */}
             <UserDetailsDropdown />
           </div>
         </div>
