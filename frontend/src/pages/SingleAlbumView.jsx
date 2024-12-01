@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useUserContext } from './../context/usercontext';
 import { AlbumGrid, UserDetailsDropdown } from '../components';
-import { LibraryAddCheck, AutoFixHigh, DeleteForever } from '@mui/icons-material';
+import { LibraryAddCheck, AutoFixHigh, DeleteForever, Info } from '@mui/icons-material';
 import './singlealbumview.css';
 import {Link, useParams, useLocation} from 'react-router-dom';
 import { toast } from 'sonner';
+
 
 
 
@@ -16,9 +17,9 @@ const SingleAlbumView = () => {
   const { albumId } = useParams();
 
   const location = useLocation();
-  const [imageObjs, setImageObjs] = useState(location.state?.initialImages || []);
+  const [imageObjs, setImageObjs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [originalImageObjs, setOriginalImageObjs] = useState(imageObjs);
+  const [originalImageObjs, setOriginalImageObjs] = useState([]);
   const [albumInfo, setAlbumInfo] = useState({});
   const [edit, setEdit] = useState(false);
   const [changesMade, setChangesMade] = useState(false);
@@ -36,6 +37,7 @@ const SingleAlbumView = () => {
       abortControllerRef.current = new AbortController();
   
       try {
+       
         const response = await axios.get(`http://localhost:9000/albums/${albumId}`, {
           withCredentials: true,
           signal: abortControllerRef.current.signal, 
@@ -46,8 +48,8 @@ const SingleAlbumView = () => {
         });
   
         const { photoObj } = response.data;
-        setImageObjs((prev)=>[...prev, ...photoObj]);
-        setOriginalImageObjs(JSON.parse(JSON.stringify(imageObjs)));
+        setImageObjs(photoObj);
+        setOriginalImageObjs(JSON.parse(JSON.stringify(photoObj)));
         setAlbumInfo(response.data.album);
       } catch (err) {
         if (err.name === 'CancelledError') {
@@ -66,7 +68,7 @@ const SingleAlbumView = () => {
 
   const handleSwitch = () => {
     if (changesMade){
-      setDiscardDialog(true);
+      handleCancel();
     }else{
       setEdit(!edit);
     }
@@ -90,23 +92,24 @@ const SingleAlbumView = () => {
   }, [discardDialog])
 
   const handleCancel = () => {
-    setImageObjs([...originalImageObjs]);
+    setImageObjs(JSON.parse(JSON.stringify(originalImageObjs)));
     setChangesMade(false);
     setDiscardDialog(false);
-    setEdit(!edit)
-  }
+    setEdit(false); 
+};
 
   const handleSave = async () => {
-
     if (changesMade){
       try {
-      
         await axios.patch(`http://localhost:9000/albums/${albumId}`,{
-          photoId: photosToDelete[0]
+          photos: photosToDelete
         }, {
           withCredentials: true,
         }).then((res)=>{
           console.log("response in deletion of photo", res.data);
+          setDiscardDialog(false);
+          setEdit(!edit);
+          setChangesMade(false);
         })
 
       toast.success("Changes saved successfully!")
@@ -121,38 +124,45 @@ const SingleAlbumView = () => {
   }
 
   const handleDeleteAlbum = async () => {
-
     setModal(true);
 
-   
   }
 
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:9000/albums/${albumId}`,{
         withCredentials: true,
+      }).then(()=>{
+        toast.success("Album deleted successfully!",{
+          duration: 1500,
+        })
+        
+        setModal(false);
       })
-      toast.success("Album deleted successfully!",{
-        duration: 3000,
-      })
-      setModal(false);
+     
       setTimeout(() => {
         window.location.href = `/accounts/${user.userID}/studiospace`;
       }, 2000);
     } catch (error) {
+      toast.error("Oops, something went wrong!",{
+        duration: 1500,
+      })
       console.log(error)
     }
   }
 
   useEffect(() => {
     if (modal) {
+      console.log("opening modal")
       ref.current?.showModal();
     }else{
+      console.log("closing modal")
       ref.current?.close();
     }
   }, [modal])
 
   const handleDeleteCancel = () => {
+   
     setModal(false);
   }
 
@@ -182,12 +192,14 @@ const SingleAlbumView = () => {
                     </div>
                     <span>{edit ? 'Cancel':'Edit'}</span>
                   </button>
-                  <button type='button' className='save-button'>
+                  {changesMade &&
+                  <button type='button' className='save-button' onClick={()=>{setDiscardDialog(true)}}>
                     <div className="save-button-icon">
                       <LibraryAddCheck/>
                     </div>
                     <span>Save</span>
                   </button>
+                  }
                   <button type='button' className='dlt-button' onClick={handleDeleteAlbum}>
                     <div className="dlt-button-icon">
                       <DeleteForever/>
@@ -208,17 +220,24 @@ const SingleAlbumView = () => {
         <AlbumGrid imageObjs={imageObjs} edit={edit} handleEditRemove={handleRemove} />
         {discardDialog && 
         <div className="discard-changes-dialog">
-                <p>Discard the changes?</p>
-                <button onClick={handleCancel}>Yes</button>
-                <button onClick={handleSave}>Save</button>
+                <Info fontSize='large'/>
+                <h4>You are about to delete photos from this album.</h4>
+                <p>Are you sure to apply the changes?</p>
+                <div className="discard-buttons-wrapper">
+                <button onClick={handleCancel}>Cancel</button>
+                <button onClick={handleSave}>Apply</button>
+                </div>
               </div>
           }
         <dialog ref={ref} className='delete-dialog'>
-              <div className="delete-album-dialog">
-                <p>Are you sure you want to delete this album?</p>
+              <Info fontSize='large'/>
+              <h4>You are about to delete this album.</h4>
+                <p>Are you sure you want to continue?</p>
+                <div className="discard-buttons-wrapper">
                 <button onClick={handleDeleteCancel}>Cancel</button>
                 <button onClick={handleDelete}>Confirm</button>
-              </div>
+                </div>
+     
         </dialog>
     </div>
 
