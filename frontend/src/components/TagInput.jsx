@@ -4,7 +4,7 @@ import { Sell } from "@mui/icons-material";
 
 const TagInput = (props) => {
   const h2Style = {
-    "font-size": props.size,
+    fontSize: props.size,
   };
 
   const [tags, setTags] = useState([]);
@@ -43,7 +43,7 @@ const TagInput = (props) => {
         <h2 style={h2Style}>{props.title} Tags</h2>
       </div>
 
-      <div class="tag-content-container">
+      <div className="tag-content-container">
         <p>Press Enter or add a comma after each tag</p>
         <ul>
           {tags.map((tag, index) => (
