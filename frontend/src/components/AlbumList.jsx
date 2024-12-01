@@ -3,19 +3,18 @@ import AlbumPreview from "./AlbumPreview";
 import { useUserContext } from "./../context/usercontext";
 import axios from "axios";
 
-const AlbumList = ({ onFetch }) => {
+const AlbumList = ({ onFetch, filterType }) => {
   const componentStyle = {
     display: "flex",
     gap: "30px",
-    "margin-top": "30px",
-    "flex-wrap": 'wrap'
+    marginTop: "30px",
+    flexWrap: "wrap",
   };
 
   const { user, updateUser, logoutUser } = useUserContext();
   const [allAlbumsPopulated, setAllAlbumsPopulated] = useState([]);
 
   useEffect(() => {
-    console.log("its working in albumslist");
     try {
       const response = axios
         .get(`http://localhost:9000/albums`, {
@@ -34,7 +33,6 @@ const AlbumList = ({ onFetch }) => {
             console.log("Data served from browser cache");
 
             if (allAlbumsPopulated && allAlbumsPopulated.length > 0) {
-              console.log("Using cached state");
               setAllAlbumsPopulated(allAlbumsPopulated);
             } else {
               console.error("No cached data available in memory");
@@ -45,9 +43,37 @@ const AlbumList = ({ onFetch }) => {
           }
         });
     } catch (err) {
-      console.log("albumssss error", err);
+      console.log("All albums fetching failed", err);
+      throw err;
     }
   }, []);
+
+  useEffect(() => {
+    handleAlbumsFilter();
+  }, [filterType]);
+
+  const handleAlbumsFilter = () => {
+    if (filterType === "Alphabetical") {
+      sortAlbumsAlphabetically();
+    } else {
+      sortAlbumsByCreationDate();
+    }
+  };
+
+  const sortAlbumsAlphabetically = () => {
+    setAllAlbumsPopulated(
+      [...allAlbumsPopulated].sort((a, b) => {
+        return a.album.title.localeCompare(b.album.title);
+      })
+    );
+  };
+  const sortAlbumsByCreationDate = () => {
+    setAllAlbumsPopulated(
+      [...allAlbumsPopulated].sort((a, b) => {
+        return new Date(a.album.createdAt) - new Date(b.album.createdAt);
+      })
+    );
+  };
 
   return (
     <div className="album-list-wrapper" style={componentStyle}>

@@ -16,7 +16,6 @@ const AlbumPreview = ({ album, presignedUrls }) => {
           },
         }
       );
-      console.log("response in fetchInitial", response.data);
       return response.data.photoObj;
     } catch (err) {
       console.error("Error fetching high-res images:", err);
@@ -25,13 +24,11 @@ const AlbumPreview = ({ album, presignedUrls }) => {
   };
 
   const handleRedirect = async () => {
-    const initialImages = await fetchInitial(album._id, { limit: 3 });
-
-    navigate(`/albums/${album._id}`, { state: { initialImages } });
+    navigate(`/albums/${album._id}`);
   };
 
   return (
-    <div class="album-preview-container">
+    <div className="album-preview-container">
       <div className="preview-grid" onClick={handleRedirect}>
         {presignedUrls.map((presignedUrl, index) => (
           <img
