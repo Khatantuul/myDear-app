@@ -71,9 +71,11 @@
   .studiospace-left {
     grid-area: sidebar;
     position: sticky;
-    top: 81.5px;
+    top: 62px;
     height: auto;
     width: 100%;
+    z-index: 100;
+   
   }
   .studiospace-left .studio-analytics-wrapper {
     display: none;
@@ -81,7 +83,7 @@
   .content-in-right .content-header-wrapper {
     grid-area: contentheader;
     position: sticky;
-    top: 137px;
+    top: 116px;
     justify-content: space-between;
    
   }

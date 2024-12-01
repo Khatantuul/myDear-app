@@ -17,8 +17,9 @@ import Achievements from "./Achievements";
 
 const Studiospace = () => {
   const mainContentTypes = ["albums", "achievements", "special"];
+  const types = ["Date Created", "Alphabetical"];
   const { user, updateUser } = useUserContext();
-  const [filterType, setFilterType] = useState("all");
+  const [filterType, setFilterType] = useState(types[0]);
   const [allAlbums, setAllAlbums] = useState(null);
   const [mainContentType, setMainContentType] = useState("albums");
   const [activeTab, setActiveTab] = useState(mainContentTypes[0]);
@@ -34,17 +35,18 @@ const Studiospace = () => {
   };
 
   const handleFilter = async (e) => {
-    const types = e.target.value === "" ? null : e.target.value;
-    setFilterType(types);
-    if (types === "all") {
+    const type = e.target.value === "" ? null : e.target.value;
+    setFilterType(type);
+    if (type === "Alphabetical") {
+
     } else {
     }
   };
 
-  const types = ["Date Created", "Alphabetical"];
+ 
 
   return (
-    <div class="studiospace">
+    <div className="studiospace">
       <div className="studiospace-container">
         <div className="studio-header">
           <div className="header-in-left">
@@ -72,7 +74,7 @@ const Studiospace = () => {
         <div className="studiospace-left">
           <div className="studio-menu-wrapper">
             <div
-              class={`studio-menu-albums ${
+              className={`studio-menu-albums ${
                 activeTab === mainContentTypes[0] ? "active" : ""
               }`}
             >
@@ -116,7 +118,7 @@ const Studiospace = () => {
               </button>
             </div>
             <div className="studio-menu-special">
-              <button class="menu-special">
+              <button className="menu-special">
                 <div className="menu-special-wrapper">
                   <div className="menu-special-left">
                     <Loyalty sx={{ color: "rgb(137, 137, 137)" }} />
@@ -185,7 +187,7 @@ const Studiospace = () => {
             {mainContentType === "albums" && (
               <div className="studio-content-wrapper">
                 <div className="main-content">
-                  <AlbumList onFetch={handleAlbumsFetched} />
+                  <AlbumList onFetch={handleAlbumsFetched} filterType={filterType} />
                 </div>
               </div>
             )}
