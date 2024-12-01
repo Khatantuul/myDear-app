@@ -11,6 +11,7 @@ import axios from "axios";
 import { useUserContext } from "./../context/usercontext";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { BallTriangle } from "react-loader-spinner";
 
 const CreateAlbum = () => {
   const { user, updateUser } = useUserContext();
@@ -27,24 +28,12 @@ const CreateAlbum = () => {
     creator: user.userID,
   });
   const [albumId, setAlbumId] = useState(null);
+  const [isPublishing, setIsPublishing] = useState(false);
   const navigate = useNavigate();
 
   const maxUploads = 10;
 
   const handleFileSelected = (photos) => {
-    // Update the selected photos state when files are selected
-
-    //compress files before setting to selectedPhotos
-    // const compressedFiles = photos.map(async (photo,idx) => {
-    //     const compressedFile = await sharp(photo.file)
-    //     .resize({width: 800})
-    //     .toBuffer()
-    //     .then((data)=>{
-    //         return new File([data], photo.file.name, {type: photo.file.type})
-    //     })
-    //     return {...photo, file:compressedFile, index:idx}
-    // })
-
     setSelectedPhotos(photos);
     setOnFileSelected(true);
     if (selectedPhotos.length > 10) {
@@ -124,6 +113,8 @@ const CreateAlbum = () => {
       formData.append(`photoInfo`, JSON.stringify(photoInfo));
       formData.append("albumInfo", JSON.stringify(values));
 
+      setIsPublishing(true);
+
       const res = await axios
         .post("http://localhost:9000/albums", formData, {
           headers: {
@@ -148,6 +139,7 @@ const CreateAlbum = () => {
 
   useEffect(() => {
     if (albumId) {
+      setIsPublishing(false);
       navigate(`/albums/${albumId}`);
     }
   }, [albumId, navigate]);
@@ -240,7 +232,7 @@ const CreateAlbum = () => {
               <textarea
                 rows="4"
                 cols="25"
-                maxlength="150"
+                maxLength="150"
                 name="description"
                 id="description"
                 placeholder="This is dedicated to my son's 1st birthday"
@@ -251,19 +243,26 @@ const CreateAlbum = () => {
         </div>
       </div>
       <div className="create-album-right">
-        <div class="maxUpload-error-wrapper" invalid={invalid.toString()}>
-          <span class="error-icon"></span>
+        <div className="maxUpload-error-wrapper" invalid={invalid.toString()}>
+          <span className="error-icon"></span>
           <p>Please only work on up to 10 photos at a time for an album!</p>
         </div>
 
         {onFileSelected === false ? (
           <FileUploader onFileSelected={handleFileSelected} />
-        ) : (
+        ) : !isPublishing ? (
           <AlbumGrid
             photos={selectedPhotos}
             handleOnSave={handleOnSave}
             handleRemove={handleRemove}
           />
+        ) : (
+          ""
+        )}
+        {isPublishing && (
+          <div className="spinner-container">
+            <BallTriangle />
+          </div>
         )}
       </div>
     </div>

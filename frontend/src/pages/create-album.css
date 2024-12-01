@@ -65,6 +65,9 @@
   text-decoration: none;
   color: #737373;
 }
+.header-back-studio:hover {
+  text-decoration: underline;
+}
 .create-album-main {
   grid-area: sidebar;
   min-height: calc(100vh - 58px);
@@ -169,4 +172,11 @@
   position: absolute;
   left: 9px;
   top: 12px;
+}
+
+.spinner-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
