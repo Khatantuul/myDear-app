@@ -2,10 +2,17 @@ import {useEffect, useState, useRef} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import { useUserContext } from './../context/usercontext';
+import { BallTriangle } from "react-loader-spinner";
 
 
 
 const CallbackComponent = () => {
+  const spinnerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh"
+  }
 
   const [redirect, setRedirect] = useState(false);
   const [responseData, setResponseData] = useState(null);
@@ -84,7 +91,9 @@ const CallbackComponent = () => {
 
 
   return (
-    <div>Loading...</div>
+    <div className="spinner-container" style={spinnerStyle}>
+    <BallTriangle />
+  </div>
   )
 }
 
