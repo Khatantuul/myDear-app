@@ -13,11 +13,6 @@ export const saveAlbum = async (albumInfo) => {
     }
 }
 
-// export const generateEtag = async (albumID) => {
-//     try{
-
-//     }
-// }
 
 export const addAlbumPhotos = async (albumID, photoID) => {
     try{
@@ -47,18 +42,21 @@ export const getAlbum = async (albumID) => {
     }
 }
 
-export const updateAlbumRemovePhoto = async (albumID, photoID) => {
+export const updateAlbumRemovePhotos = async (albumID, photos) => {
     try {
         const album = await Album.findById(albumID).exec();
 
         if(!album){
             throw new Error("Album not found")
         }
-        await Photo.findByIdAndDelete(photoID).exec();
-        album.photos = album.photos.filter(photo => photo != photoID);
-        const updatedAlbum = await album.save();
-        return updatedAlbum;
+
+        const updatedAlbum = await Album.findByIdAndUpdate(
+            albumID,
+            { $pull: { photos: { $in: photos } } },
+            { new: true }
+        ).exec();
     } catch (error) {
+        console.log("Error deleting photos from album:", error);
         throw error;
     }
 }
