@@ -7,7 +7,7 @@ const albumSchema = new mongoose.Schema({
     tags: [String],
     photos: [{type: mongoose.Schema.Types.ObjectId, ref: 'Photo'}],
     creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  });
+  },{timestamps: true});
 
 const Album = mongoose.model("Album",albumSchema);
 

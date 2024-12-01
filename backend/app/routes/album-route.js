@@ -10,7 +10,7 @@ router.route("/test")
     .get(albumController.fetchAllUserPhotos)
 router.route("/:albumId")
     .get(albumController.fetchAllAlbumPhotos)
-    .patch(albumController.deletePhotoFromAlbum)
+    .patch(albumController.deletePhotosFromAlbum)
     .delete(albumController.deleteAlbum);
  
 
