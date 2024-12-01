@@ -94,7 +94,7 @@ const AlbumGrid = ({
     <>
       {photos && (
         <div className="gallery">
-          <dialog ref={ref} class={modal}>
+          <dialog ref={ref} className={modal}>
             <div className="dialog-full">
               <div
                 className={`dialog-img-wrapper ${
@@ -145,7 +145,7 @@ const AlbumGrid = ({
               >
                 <picture>
                   <source srcSet={item.url} type="image/webp" />
-                  <img src={item.url} alt="Example" style={{ width: "100%" }} />
+                  <img src={item.url} alt="Example" style={{ width: "100%" }} loading="lazy"/>
                 </picture>
 
                 {hoveredIndex === index && (
@@ -178,6 +178,7 @@ const AlbumGrid = ({
                 <picture>
                   <source srcSet={imageObj.presignedUrl} type="image/webp" />
                   <img
+                    loading="lazy"
                     src={imageObj.presignedUrl}
                     alt="Example"
                     style={{ width: "100%" }}
