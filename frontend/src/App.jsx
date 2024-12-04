@@ -10,6 +10,7 @@ import {
   CreateAlbum,
   AuthRequest,
   Achievements,
+  AddPhotos
 } from "./pages";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
@@ -17,7 +18,6 @@ import { UserProvider } from "./context/usercontext";
 import PrivateRoute from "./util/PrivateRoute";
 import SingleAlbumView from "./pages/SingleAlbumView";
 import {Toaster} from 'sonner';
-// import { useEffect } from "react";
 
 const theme = createTheme({
   typography: {
@@ -56,6 +56,12 @@ function App() {
             </Route>
             <Route element={<PrivateRoute />}>
               <Route
+                element={<AddPhotos />}
+                path="/albums/:albumId/add"
+              />
+            </Route>
+            <Route element={<PrivateRoute />}>
+              <Route
                 element={<CreateAlbum />}
                 path="/albums"
               />
@@ -67,7 +73,7 @@ function App() {
               />
             </Route>
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/test" element={<Test />} />
+            {/* <Route path="/" element={<Test />} /> */}
             <Route path="/auth" element={<AuthRequest />} />
             <Route path="/callback" element={<CallbackComponent />} />
           </Routes>
