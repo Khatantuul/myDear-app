@@ -77,6 +77,7 @@ export const addUserGoogleID = async (id, googleID) => {
 export const getPersonDetails = async (accessToken) => {
     try{
         // const {access_token} = req.body;
+        console.log("woerking inside getPersonDetails");
         const userInfo = await axios
         .get('https://people.googleapis.com/v1/people/me', {
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -84,6 +85,7 @@ export const getPersonDetails = async (accessToken) => {
         })
         return userInfo;
     }catch(err){
+        console.log("Error in getPersonDetails", err);
         throw err;
     }
 }

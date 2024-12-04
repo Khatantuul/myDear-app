@@ -1,5 +1,4 @@
 import Album from "../models/album.js";
-import Photo from "../models/photo.js";
  
 
 export const saveAlbum = async (albumInfo) => {

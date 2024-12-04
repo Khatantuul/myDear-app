@@ -7,6 +7,7 @@ import {config} from "dotenv";
 import route from "./routes/index.js";
 import session from "express-session";
 import MongoStore from 'connect-mongo'; 
+import Album from "./models/album.js";
 
 
 const upload = multer({ dest: 'uploads/' }); 
@@ -14,6 +15,7 @@ const store = new session.MemoryStore();
 
 const app = express();
 config();
+
 
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=>{
@@ -29,9 +31,12 @@ const sessionStore = new MongoStore({
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true,  
+    exposedHeaders: ['Etag'],
+    allowedHeaders: ['Content-Type', 'Authorization','preview']
   }));
 app.use(session({
     name: 'sid',

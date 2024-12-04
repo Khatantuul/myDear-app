@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.route("/")
     .post(albumController.createAlbum) 
+    .patch(albumController.addPhotosToAlbum)
     .get(albumController.fetchAllAlbums)
 router.route("/test")
     .get(albumController.fetchAllUserPhotos)
