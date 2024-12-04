@@ -101,7 +101,7 @@ const AlbumGrid = ({
                   horizontal ? "horizontal" : "vertical"
                 }`}
               >
-                <img src={singlePhoto.url} alt="photos" />
+                <img src={singlePhoto.url} alt="photos" loading="lazy" />
               </div>
               <div className="dialog-img-details-wrapper">
                 <div className="dialog-img-details-note">
@@ -114,7 +114,7 @@ const AlbumGrid = ({
                   <input
                     type="text"
                     placeholder="Me and the gang at Java Joe's."
-                    maxLength={20}
+                    maxLength={120}
                     name="note"
                     id="note"
                     value={photoValues["note"]}
@@ -145,7 +145,7 @@ const AlbumGrid = ({
               >
                 <picture>
                   <source srcSet={item.url} type="image/webp" />
-                  <img src={item.url} alt="Example" style={{ width: "100%" }} loading="lazy"/>
+                  <img src={item.url} alt="Example" style={{ width: "100%", height:"auto" }} loading="lazy"/>
                 </picture>
 
                 {hoveredIndex === index && (
@@ -181,13 +181,17 @@ const AlbumGrid = ({
                     loading="lazy"
                     src={imageObj.presignedUrl}
                     alt="Example"
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", height: "auto" }}
                   />
                 </picture>
                 <figcaption
                   className={hoveredIndex === index ? "opened" : "closed"}
                 >
                   {imageObj.note}
+                  <div style={{height:"20px"}}></div>
+                  {imageObj.tags.map((tag,tagIdx)=>(
+                    <span key={tagIdx}> #{tag}</span>
+                  ))}
                 </figcaption>
                 {edit ? (
                   <Delete

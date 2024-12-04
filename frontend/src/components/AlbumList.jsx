@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import AlbumPreview from "./AlbumPreview";
 import { useUserContext } from "./../context/usercontext";
 import axios from "axios";
+import { BallTriangle } from "react-loader-spinner";
 
-const AlbumList = ({ onFetch, filterType }) => {
+const AlbumList = ({ onFetch, filterType, searchTerms }) => {
   const componentStyle = {
     display: "flex",
     gap: "30px",
@@ -13,8 +14,9 @@ const AlbumList = ({ onFetch, filterType }) => {
 
   const { user, updateUser, logoutUser } = useUserContext();
   const [allAlbumsPopulated, setAllAlbumsPopulated] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  const fetchAllAlbums = ()=>{
     try {
       const response = axios
         .get(`http://localhost:9000/albums`, {
@@ -26,6 +28,7 @@ const AlbumList = ({ onFetch, filterType }) => {
         })
         .then((res) => {
           setAllAlbumsPopulated(res.data);
+          console.log("iinitial albums fetch", res.data)
           onFetch(res.data);
         })
         .catch((err) => {
@@ -46,6 +49,12 @@ const AlbumList = ({ onFetch, filterType }) => {
       console.log("All albums fetching failed", err);
       throw err;
     }
+  }
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchAllAlbums();
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -75,15 +84,37 @@ const AlbumList = ({ onFetch, filterType }) => {
     );
   };
 
+  useEffect(() => {
+    const fetchAlbums = async () => {
+      if (!searchTerms) {
+        fetchAllAlbums();
+        return;
+      }
+      try {
+        const res = await axios.get(
+          `http://localhost:9000/search?searchTerms=${searchTerms}`,
+          { withCredentials: true }
+        );
+        console.log("res.data in albumlist",res.data)
+        setAllAlbumsPopulated(res.data);
+
+      } catch (err) {
+        console.log("Albums search failed", err);
+      }
+    };
+  
+    fetchAlbums();
+  }, [searchTerms]);
+
   return (
     <div className="album-list-wrapper" style={componentStyle}>
-      {allAlbumsPopulated.map((album) => (
+      {!isLoading ? allAlbumsPopulated.map((album) => (
         <AlbumPreview
           key={album.album._id}
           album={album.album}
           presignedUrls={album.presignedUrls}
         />
-      ))}
+      )): <BallTriangle/>}
     </div>
   );
 };

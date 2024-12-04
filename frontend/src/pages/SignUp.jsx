@@ -112,7 +112,7 @@ const SignUp = () => {
                 <div className="rightsection-content-wrapper">
                     <h1>Sign up to your happiest place</h1>
                 
-                    <img src='./assets/signup-back.jpeg' alt='sign-up-img'/>
+                    <img src='./assets/baby.jpeg' alt='sign-up-img'/>
                 </div>
             </section>
             <section class='left-section'>  

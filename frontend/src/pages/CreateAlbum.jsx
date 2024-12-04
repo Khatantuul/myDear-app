@@ -36,7 +36,7 @@ const CreateAlbum = () => {
   const handleFileSelected = (photos) => {
     setSelectedPhotos(photos);
     setOnFileSelected(true);
-    if (selectedPhotos.length > 10) {
+    if (photos.length > 10) {
       setInvalid(true);
     } else {
       setInvalid(false);
@@ -76,6 +76,7 @@ const CreateAlbum = () => {
       ];
       return newFiles;
     });
+    setOnFileSelected(true);
     if (selectedPhotos.length > 10) {
       setInvalid(true);
     } else {
@@ -83,10 +84,6 @@ const CreateAlbum = () => {
     }
   };
 
-  const [photoValues, setPhotoValues] = useState({
-    note: "",
-    tags: [],
-  });
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -126,8 +123,6 @@ const CreateAlbum = () => {
           setAlbumId((prev) => {
             return res.data.album._id;
           });
-
-          // navigate(`/albums/${albumId}`);
         })
         .catch((err) => {
           throw err;
@@ -154,6 +149,12 @@ const CreateAlbum = () => {
       (photo, index) => index !== idx
     );
     setSelectedPhotos(updatedPhotos);
+    const photos = updatedPhotos?.length || 0;
+    if(photos===0){
+      setOnFileSelected(false);
+    }else if(photos < 10){
+      setInvalid(false);
+    }
   };
 
   return (
@@ -243,11 +244,12 @@ const CreateAlbum = () => {
         </div>
       </div>
       <div className="create-album-right">
+        {invalid && 
         <div className="maxUpload-error-wrapper" invalid={invalid.toString()}>
           <span className="error-icon"></span>
           <p>Please only work on up to 10 photos at a time for an album!</p>
         </div>
-
+}
         {onFileSelected === false ? (
           <FileUploader onFileSelected={handleFileSelected} />
         ) : !isPublishing ? (
