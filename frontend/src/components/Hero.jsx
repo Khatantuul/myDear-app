@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./hero-section.css";
 import {VolunteerActivismTwoTone} from '@mui/icons-material';
+import heroimage from '/assets/hero.jpeg'
 
 
 const Hero = () => {
@@ -42,7 +43,7 @@ const Hero = () => {
           </div>
         </div>
         <div className="hero-img-wrapper">
-          <img src="/assets/hero.jpeg" alt="hero" />
+          <img src={heroimage} alt="hero" />
         </div>
       </div>
       <div
