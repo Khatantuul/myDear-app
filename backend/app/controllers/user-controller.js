@@ -37,33 +37,77 @@ export const authenticate = async (req,res) => {
     }
 }
 
-export const authenticateOauth = async (req,res) => {
+export const authenticateOauth = async (req, res) => {
+    console.log("ok coming here");
+    try {
+        //Authorization header (Bearer token) is provided
+        const accessToken = req.headers.authorization?.split(' ')[1];
+
+        if (accessToken) {
     
-    try{
-        
-        const authcode = req.body.authC;
-        const response = await userServices.exchange(authcode);
-        const accessToken = response.data ? response.data.access_token : response.access_token;
-        const userDetails = await userServices.getPersonDetails(accessToken);
-        
-        if (userDetails.data){
-            // const email = userDetails.data.emailAddresses[0].value;
-            const googleID = userDetails.data.resourceName.split('/')[1];
-            const user = await userServices.checkByGoogleID(googleID);
-            if (user){
-                const userSession = createSession(user);
-                req.session.user = userSession;
-                setSuccessResponse(userSession, res);
-                }else{
+            console.log("Access token provided, using it directly...");
+            const userDetails = await userServices.getPersonDetails(accessToken);
+
+            if (userDetails.data) {
+                const googleID = userDetails.data.resourceName.split('/')[1];
+                const user = await userServices.checkByGoogleID(googleID);
+
+                if (user) {
+                    const userSession = createSession(user);
+                    req.session.user = userSession;
+                    setSuccessResponse(userSession, res);
+                } else {
                     const err = new Error("User not found");
                     err.status = 401;
                     throw err;
                 }
+            } else {
+                const err = new Error("Unable to fetch user details");
+                err.status = 500;
+                throw err;
             }
-        }catch(err){
-            setErrorResponse(err,res);
+        } else if (req.body.authC) {
+            // from my front
+            console.log("Auth code provided, exchanging for access token...");
+            const authCode = req.body.authC;
+            const response = await userServices.exchange(authCode);
+
+            const accessToken = response.data
+                ? response.data.access_token
+                : response.access_token;
+
+            const userDetails = await userServices.getPersonDetails(accessToken);
+
+            if (userDetails.data) {
+                const googleID = userDetails.data.resourceName.split('/')[1];
+                const user = await userServices.checkByGoogleID(googleID);
+
+                if (user) {
+                    const userSession = createSession(user);
+                    req.session.user = userSession;
+                    setSuccessResponse(userSession, res);
+                } else {
+                    const err = new Error("User not found");
+                    err.status = 401;
+                    throw err;
+                }
+            } else {
+                const err = new Error("Unable to fetch user details");
+                err.status = 500;
+                throw err;
+            }
+        } else {
+           
+            const err = new Error(
+                "Authorization header or auth code must be provided"
+            );
+            err.status = 400;
+            throw err;
         }
+    } catch (err) {
+        setErrorResponse(err, res);
     }
+};
 
 
 export const postUser = async (req, res) => {
