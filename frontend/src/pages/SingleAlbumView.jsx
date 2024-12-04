@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useUserContext } from './../context/usercontext';
 import { AlbumGrid, UserDetailsDropdown } from '../components';
-import { LibraryAddCheck, AutoFixHigh, DeleteForever, Info } from '@mui/icons-material';
+import { LibraryAddCheck, AutoFixHigh, DeleteForever, Info, Add } from '@mui/icons-material';
 import './singlealbumview.css';
 import {Link, useParams, useLocation} from 'react-router-dom';
 import { toast } from 'sonner';
@@ -200,12 +200,20 @@ const SingleAlbumView = () => {
                     <span>Save</span>
                   </button>
                   }
+                    <Link to={`/albums/${albumId}/add`} className='add-photos-link'
+                   state={{title:albumInfo.title,albumId}}>
+                    <div className="add-link-icon">
+                      <Add/>
+                    </div>
+                    <span className="multi-line-text">Add photos</span>
+                  </Link>
                   <button type='button' className='dlt-button' onClick={handleDeleteAlbum}>
                     <div className="dlt-button-icon">
                       <DeleteForever/>
                     </div>
                     <span className="multi-line-text">Delete Album</span>
                   </button>
+                
                 
               </div>
             <div className="single-album-header-right">
