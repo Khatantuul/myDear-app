@@ -9,11 +9,14 @@ import {
   ChevronRightTwoTone,
   Add,
   ModeNight,
+  Clear
 } from "@mui/icons-material";
 import { useUserContext } from "./../context/usercontext";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Achievements from "./Achievements";
+import debounce from "lodash.debounce"; // Use lodash's debounce for simplicity
+
 
 const Studiospace = () => {
   const mainContentTypes = ["albums", "achievements", "special"];
@@ -23,6 +26,9 @@ const Studiospace = () => {
   const [allAlbums, setAllAlbums] = useState(null);
   const [mainContentType, setMainContentType] = useState("albums");
   const [activeTab, setActiveTab] = useState(mainContentTypes[0]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(""); // Debounced value
+
   const navigate = useNavigate();
 
   const handleAlbumsFetched = (albumData) => {
@@ -37,13 +43,25 @@ const Studiospace = () => {
   const handleFilter = async (e) => {
     const type = e.target.value === "" ? null : e.target.value;
     setFilterType(type);
-    if (type === "Alphabetical") {
-
-    } else {
-    }
   };
 
- 
+  useEffect(() => {
+    const handler = debounce((term) => {
+      setDebouncedSearchTerm(term);
+    }, 500); // Debounce delay (500ms)
+
+    handler(searchTerm);
+
+    return () => handler.cancel(); // Clean up debounce handler
+  }, [searchTerm]);
+
+  const handleSearchBarChange = (e) => {
+    setSearchTerm(e.target.value); // Update search term on every keystroke
+  };
+
+  const handleRemoveInput = ()=>{
+    setSearchTerm("");
+  }
 
   return (
     <div className="studiospace">
@@ -62,12 +80,21 @@ const Studiospace = () => {
                   className="search-input"
                   type="text"
                   placeholder='Search by tags e.g. "9th birthday"'
+                  value={searchTerm}
+                  onChange={handleSearchBarChange}
                 />
+            
+               
+               {/* <button onClick={() => setDebouncedSearchTerm(searchTerm)}>Search</button> */}
               </div>
+              {searchTerm && 
+              <div className="delete-icon-wrapper">
+                 <Clear fontSize="small" onClick={handleRemoveInput}/>
+              </div>
+}
             </div>
           </div>
           <div className="header-title-wrapper">
-            {/* <ModeNight /> */}
             <UserDetailsDropdown />
           </div>
         </div>
@@ -136,19 +163,19 @@ const Studiospace = () => {
             <div className="analytics analytics-album-count">
               Album count: {allAlbums?.length}
             </div>
-            <div className="analytics analytics-photos-count">
+            {/* <div className="analytics analytics-photos-count">
               Photos count:{" "}
               {allAlbums?.reduce(
                 (acc, album) => acc + (album.album.photos.length || 0),
                 0
               )}
-            </div>
+            </div> */}
             <div className="analytics analytics-files-count">Files count</div>
           </div>
         </div>
         <div className="studiospace-right">
-          <div className="content-in-right">
-            <div className="greetings-wrapper">
+          <div className="top">
+          <div className="greetings-wrapper">
               <h1>Hello, {user.username}!</h1>
             </div>
             <div className="content-header-wrapper">
@@ -169,11 +196,12 @@ const Studiospace = () => {
                   </Link>
                 )}
                 {mainContentType === "achievements" && (
-                  <Link to="/achieve" className="createAlbum-link">
+                  <Link to="" className="createAlbum-link">
                     Add new
                   </Link>
                 )}
               </div>
+              {mainContentType !== "achievements" &&
               <div className="filter">
                 <select value={filterType} onChange={handleFilter}>
                   {types.map((type) => (
@@ -183,14 +211,21 @@ const Studiospace = () => {
                   ))}
                 </select>
               </div>
+}
             </div>
-            {mainContentType === "albums" && (
+          </div>
+          <div className="content-in-right">
+          
+          
+            {mainContentType === "albums" ? (
               <div className="studio-content-wrapper">
                 <div className="main-content">
-                  <AlbumList onFetch={handleAlbumsFetched} filterType={filterType} />
+                  <AlbumList onFetch={handleAlbumsFetched} filterType={filterType} searchTerms={debouncedSearchTerm} />
                 </div>
               </div>
-            )}
+            ): <div className="achieve" style={{fontSize: "28px", marginLeft: "15px"}}><p>Coming soon!</p></div>
+            }
+            
           </div>
         </div>
       </div>
