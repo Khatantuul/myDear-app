@@ -33,14 +33,14 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://my-dear-app.vercel.app/',
     credentials: true,  
     exposedHeaders: ['Etag'],
     allowedHeaders: ['Content-Type', 'Authorization','preview']
   }));
 app.use(session({
     name: 'sid',
-    secret: 'secretthatissecretsokeepthesecret', 
+    secret: process.env.SESSION_SECRET, 
     store: sessionStore,
     resave: false,
     saveUninitialized: false, 
