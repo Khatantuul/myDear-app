@@ -56,7 +56,7 @@ const Hero = () => {
       </div>
       <div className="content-wrapper">
         <div className="step1-num">
-          <img src="../../assets/number1.svg" alt="step1 num"/>
+          <img src="/assets/number1.svg" alt="step1 num"/>
           <span style={{ color: "white" }}>Set up & start capturing</span>
         </div>
         <div className="step1">
@@ -74,7 +74,7 @@ const Hero = () => {
          
         </div>
         <div className="step2-num">
-          <img src="../../assets/number2.svg" alt="step2 num" />
+          <img src="/assets/number2.svg" alt="step2 num" />
           <span>Document moments with notes</span>
         </div>
         <div className="step2-content-wrapper">
@@ -93,12 +93,12 @@ const Hero = () => {
          
         </div>
         <div className="step3-num">
-          <img src="../../assets/number3.svg" alt="step3 num"/>
+          <img src="/assets/number3.svg" alt="step3 num"/>
           <span>Time for Surprise!</span>
         </div>
         <div className="step3-content-wrapper">
         <div className="step3-img">
-            <img src="../../assets/gift.svg" alt="step3" />
+            <img src="/assets/gift.svg" alt="step3" />
           </div>
           <div className="step3-text-p">
             <p>
