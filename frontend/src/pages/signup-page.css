@@ -37,7 +37,6 @@
     flex-direction: column;
     align-items: center;
     justify-content:center;
-    /* border: 1px solid green; */
     height: 100%;
 }
 
@@ -52,10 +51,10 @@
 }
 
 .rightsection-content-wrapper img{
-    width: 400px;
+    width: 100%;
     height: auto;
     border-radius: 10px;
-    /* box-shadow: 7px 7px 2px #ccc; */
+    padding: 30px;
 }
 
 .left-section{
@@ -281,7 +280,6 @@
     left: -1px;
     width: 36px;
     content: "";
-    /* vertical-align: top;     */
 }
 
 .signup-form-validation-error-wrapper span.error-icon::before,
