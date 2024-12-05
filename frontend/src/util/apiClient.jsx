@@ -4,6 +4,6 @@ const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
-console.log(import.meta.env.VITE_API_BASE_URL); // Should log your backend URL
+console.log(import.meta.env.VITE_API_BASE_URL); 
 
 export default apiClient;
