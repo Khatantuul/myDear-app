@@ -39,6 +39,9 @@ app.use(cors({
     exposedHeaders: ['Etag'],
     allowedHeaders: ['Content-Type', 'Authorization','preview']
   }));
+
+app.options('*', cors());
+
 app.use(session({
     name: 'sid',
     secret: process.env.SESSION_SECRET, 
