@@ -76,12 +76,13 @@ export const authenticateOauth = async (req, res) => {
                 ? response.data.access_token
                 : response.access_token;
 
-            const userDetails = await userServices.getPersonDetails(accessToken);
-
+            const userDetails = await userServices.getPersonDetailsconsole.log("user inside authenticateOauth: ", user);
             if (userDetails.data) {
                 const googleID = userDetails.data.resourceName.split('/')[1];
+                console.log("goodleID inside authenticateOauth: ", googleID);
                 const user = await userServices.checkByGoogleID(googleID);
-
+                console.log("userDetails inside authenticateOauth: ", userDetails.data);
+                console.log("user inside authenticateOauth: ", user);
                 if (user) {
                     const userSession = createSession(user);
                     req.session.user = userSession;
