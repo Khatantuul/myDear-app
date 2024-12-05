@@ -76,7 +76,8 @@ export const authenticateOauth = async (req, res) => {
                 ? response.data.access_token
                 : response.access_token;
 
-            const userDetails = await userServices.getPersonDetailsconsole.log("user inside authenticateOauth: ", user);
+            const userDetails = await userServices.getPersonDetails(accessToken);
+            console.log("user inside authenticateOauth: ", user);
             if (userDetails.data) {
                 const googleID = userDetails.data.resourceName.split('/')[1];
                 console.log("goodleID inside authenticateOauth: ", googleID);
