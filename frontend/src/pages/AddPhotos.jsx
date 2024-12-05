@@ -11,6 +11,7 @@ import { useUserContext } from "../context/usercontext";
 import { Link, useNavigate, useLocation} from "react-router-dom";
 import { toast } from "sonner";
 import { BallTriangle } from "react-loader-spinner";
+import apiClient from '../util/apiClient';
 
 const AddPhotos = () => {
   const { user, updateUser } = useUserContext();
@@ -97,8 +98,8 @@ const AddPhotos = () => {
 
       setIsPublishing(true);
 
-      const res = await axios
-        .patch("http://localhost:9000/albums", formData, {
+      const res = await apiClient
+        .patch("/albums", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

@@ -12,6 +12,7 @@ import { useUserContext } from "./../context/usercontext";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { BallTriangle } from "react-loader-spinner";
+import apiClient from '../util/apiClient';
 
 const CreateAlbum = () => {
   const { user, updateUser } = useUserContext();
@@ -112,8 +113,8 @@ const CreateAlbum = () => {
 
       setIsPublishing(true);
 
-      const res = await axios
-        .post("http://localhost:9000/albums", formData, {
+      const res = await apiClient
+        .post("/albums", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

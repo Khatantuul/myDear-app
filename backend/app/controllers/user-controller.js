@@ -196,7 +196,7 @@ export const exchangeAuthCodeForAccessToken = async (req,res) => {
             grant_type: 'authorization_code',
             code: code,
             scope: openid,
-            redirect_uri: 'http://localhost:3000/callback',
+            redirect_uri: `${process.env.VITE_APP_URL}/callback`,
             client_id: clientId,
             client_secret: clientSecret
             

@@ -5,7 +5,7 @@ import {Brand} from '../components';
 const AuthRequest = () => {
 
   const handleClick = () => {
-    window.location.href = 'http://localhost:3000/login'
+    window.location.href = '/login'
   }
 
   return (

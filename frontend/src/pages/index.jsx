@@ -6,3 +6,4 @@ export {default as CreateAlbum} from './CreateAlbum.jsx';
 export {default as AuthRequest} from './AuthRequest.jsx';
 export {default as Achievements} from './Achievements.jsx';
 export {default as AddPhotos} from './AddPhotos.jsx'
+export {default as apiClient} from '../util/apiClient.jsx';

@@ -3,7 +3,7 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import { useUserContext } from './../context/usercontext';
 import { BallTriangle } from "react-loader-spinner";
-
+import apiClient from '../util/apiClient';
 
 
 const CallbackComponent = () => {
@@ -28,7 +28,7 @@ const CallbackComponent = () => {
       
       const exchangeCodeForAccessToken = async (code) => {
         try {
-        const response = await axios.post('http://localhost:9000/users', { code },{
+        const response = await apiClient.post('/users', { code },{
           withCredentials: true
         })
         .then((res)=>{
@@ -51,7 +51,7 @@ const CallbackComponent = () => {
       const exchangeCodeForAccessTokenForLogin = async (authC) => {
         try {
         
-          const response = await axios.post('http://localhost:9000/users/oauth/login', { authC },{
+          const response = await apiClient.post('/users/oauth/login', { authC },{
             withCredentials: true
         })
         .then((res)=>{

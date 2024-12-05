@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./hero-section.css";
 import {VolunteerActivismTwoTone} from '@mui/icons-material';
-
+import { Link} from "react-router-dom";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -36,9 +36,9 @@ const Hero = () => {
           </div>
 
           <div className="getstarted-link-wrapper">
-            <a href="http://localhost:3000/signup" class="getstarted-link">
+            <Link to="/signup"  class="getstarted-link">
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
         <div className="hero-img-wrapper">

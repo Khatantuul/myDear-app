@@ -5,9 +5,9 @@ import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 import './login-page.css';
 import {Brand} from '../components';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { useUserContext } from './../context/usercontext';
-
+import apiClient from '../util/apiClient';
 
 
 const Test = () => {
@@ -46,7 +46,7 @@ const Test = () => {
         }else{
             setInvalid(false);
             
-            const data = await axios.post('http://localhost:9000/users/login', values, {
+            const data = await apiClient.post('/users/login', values, {
                 withCredentials: true
             })
 
@@ -77,7 +77,7 @@ const Test = () => {
             
         flow: 'auth-code',
         ux_mode: 'redirect',
-        redirect_uri: 'http://localhost:3000/callback',
+        redirect_uri: '/callback',
         state: JSON.stringify({ login: true })
     })
 
@@ -98,7 +98,7 @@ const Test = () => {
         <div class='formcontainer'>
             <div class='signup-section'>
             <span class="signup-link-text">Don't have an account yet?</span>
-            <a href="http://localhost:3000/signup" class='signup-link-aTag'>Sign Up</a>
+            <Link to="/signup" class='signup-link-aTag'>Sign Up</Link>
             </div>
             <div class='content-section'>
                 <Brand/>

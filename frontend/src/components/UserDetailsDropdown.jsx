@@ -2,7 +2,7 @@ import {useState, useRef, useEffect} from 'react';
 import axios from 'axios';
 import {useNavigate, Link} from 'react-router-dom';
 import { useUserContext } from './../context/usercontext';
-
+import apiClient from '../util/apiClient';
 
 const UserDetailsDropdown = () => {
 
@@ -31,7 +31,7 @@ const UserDetailsDropdown = () => {
     
       const logout = async() => {
         try{
-          const response = await axios.delete('http://localhost:9000/api/sessions',{
+          const response = await apiClient.delete('/api/sessions',{
             withCredentials: true
           })
           .then((res)=>{

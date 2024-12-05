@@ -2,13 +2,14 @@ import React from "react";
 import "./albumpreview.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import apiClient from '../util/apiClient';
 
 const AlbumPreview = ({ album, presignedUrls }) => {
   const navigate = useNavigate();
   const fetchInitial = async (albumId, { limit }) => {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/albums/${albumId}`,
+      const response = await apiClient.get(
+        `/albums/${albumId}`,
         {
           withCredentials: true,
           params: {

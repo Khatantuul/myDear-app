@@ -3,6 +3,7 @@ import AlbumPreview from "./AlbumPreview";
 import { useUserContext } from "./../context/usercontext";
 import axios from "axios";
 import { BallTriangle } from "react-loader-spinner";
+import apiClient from '../util/apiClient';
 
 const AlbumList = ({ onFetch, filterType, searchTerms }) => {
   const componentStyle = {
@@ -18,8 +19,8 @@ const AlbumList = ({ onFetch, filterType, searchTerms }) => {
 
   const fetchAllAlbums = ()=>{
     try {
-      const response = axios
-        .get(`http://localhost:9000/albums`, {
+      const response = apiClient
+        .get(`/albums`, {
           withCredentials: true,
           headers: {
             preview: true,
@@ -91,8 +92,8 @@ const AlbumList = ({ onFetch, filterType, searchTerms }) => {
         return;
       }
       try {
-        const res = await axios.get(
-          `http://localhost:9000/search?searchTerms=${searchTerms}`,
+        const res = await apiClient.get(
+          `/search?searchTerms=${searchTerms}`,
           { withCredentials: true }
         );
         console.log("res.data in albumlist",res.data)

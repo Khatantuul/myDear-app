@@ -6,6 +6,7 @@ import { LibraryAddCheck, AutoFixHigh, DeleteForever, Info, Add } from '@mui/ico
 import './singlealbumview.css';
 import {Link, useParams, useLocation} from 'react-router-dom';
 import { toast } from 'sonner';
+import apiClient from '../util/apiClient';
 
 
 
@@ -38,7 +39,7 @@ const SingleAlbumView = () => {
   
       try {
        
-        const response = await axios.get(`http://localhost:9000/albums/${albumId}`, {
+        const response = await apiClient.get(`/albums/${albumId}`, {
           withCredentials: true,
           signal: abortControllerRef.current.signal, 
          params:{
@@ -101,7 +102,7 @@ const SingleAlbumView = () => {
   const handleSave = async () => {
     if (changesMade){
       try {
-        await axios.patch(`http://localhost:9000/albums/${albumId}`,{
+        await apiClient.patch(`/albums/${albumId}`,{
           photos: photosToDelete
         }, {
           withCredentials: true,
@@ -130,7 +131,7 @@ const SingleAlbumView = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:9000/albums/${albumId}`,{
+      await axios.delete(`/albums/${albumId}`,{
         withCredentials: true,
       }).then(()=>{
         toast.success("Album deleted successfully!",{

@@ -5,7 +5,8 @@ import './signup-page.css';
 import {Brand} from '../components';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-
+import { Link} from "react-router-dom";
+import apiClient from '../util/apiClient';
 
 const EML_RGX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_RGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,24}$/;
@@ -53,10 +54,10 @@ const SignUp = () => {
         }
         setInvalid(false);
 
-        const response = await axios.post('http://localhost:9000/users/signup', values)
+        const response = await apiClient.post('/users/signup', values)
         .then(res => {
             if (res.status >= 200 && res.status < 300){
-                window.location.href = 'http://localhost:3000/auth';
+                window.location.href = '/auth';
             }
         })
         .catch(err => {
@@ -101,7 +102,7 @@ const SignUp = () => {
             
         flow: 'auth-code',
         ux_mode: 'redirect',
-        redirect_uri: 'http://localhost:3000/callback'
+        redirect_uri: '/callback'
     })
     
 
@@ -124,7 +125,7 @@ const SignUp = () => {
                 </div>}
                 <div class='signin-section'>
                     <span class="signin-link-text">Already have an account?</span>
-                    <a href="http://localhost:3000/login" class='signin-link-aTag'>Log in</a>
+                    <Link to="/login" class='signin-link-aTag'>Log in</Link>
                 </div>
                 {generalRegistration? 
                     <div className="signup-form-wrapper">
