@@ -33,8 +33,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(cors({
-    origin: 'https://my-dear-app.vercel.app/',
+    origin: 'https://my-dear-app.vercel.app',
     credentials: true,  
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     exposedHeaders: ['Etag'],
     allowedHeaders: ['Content-Type', 'Authorization','preview']
   }));
