@@ -51,7 +51,7 @@ const CallbackComponent = () => {
       const exchangeCodeForAccessTokenForLogin = async (authC) => {
         try {
         
-          const response = await apiClient.post('/users/oauth/login', { authC },{
+          const response = await axios.post('https://my-dear-app-5exk.vercel.app/users/oauth/login', { authC },{
             withCredentials: true
         })
         .then((res)=>{
