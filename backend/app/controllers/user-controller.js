@@ -38,7 +38,7 @@ export const authenticate = async (req,res) => {
 }
 
 export const authenticateOauth = async (req, res) => {
-    console.log("ok coming here");
+ 
     try {
         //Authorization header (Bearer token) is provided
         const accessToken = req.headers.authorization?.split(' ')[1];
@@ -77,18 +77,16 @@ export const authenticateOauth = async (req, res) => {
                 : response.access_token;
 
             const userDetails = await userServices.getPersonDetails(accessToken);
-            console.log("userDetails from getPersonDetails: ", userDetails);
+          
    
             if (userDetails) {
                 const googleID = userDetails.resourceName.split('/')[1];
-                console.log("goodleID inside authenticateOauth: ", googleID);
                 const user = await userServices.checkByGoogleID(googleID);
-                console.log("userDetails inside authenticateOauth: ", userDetails.data);
-                console.log("user inside authenticateOauth: ", user);
+               
                 if (user) {
                     const userSession = createSession(user);
                     req.session.user = userSession;
-                    console.log("session created?", req.session.user);
+                  
                     req.session.save((err) => {
                         if (err) {
                             console.error("Error saving session:", err);
@@ -221,7 +219,7 @@ export const exchangeAuthCodeForAccessToken = async (req,res) => {
 }
 
 export const createSession = (user) => {
-    console.log("inside createSession");
+   
     try{
         const userSession = {userID: user._id, username: user.username, authenticated: true,
             firstname: user.firstname, lastname: user.lastname, email: user.email};
