@@ -23,14 +23,15 @@ mongoose.connect(process.env.DB_URI, {useNewUrlParser: true, useUnifiedTopology:
 })
 .catch(err=>console.log(err))
 
-const sessionStore = new MongoStore({
+const sessionStore = MongoStore.create({
     mongoUrl: process.env.DB_URI,
-    collection: 'sessions',
-    ttl: parseInt(1000 * 60 * 60 * 2)
-})
+    collectionName: 'sessions',
+    ttl: 60 * 60 * 2, 
+});
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
 
 app.use(cors({
     origin: 'https://my-dear-app.vercel.app',
@@ -38,8 +39,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     exposedHeaders: ['Etag'],
     allowedHeaders: ['Content-Type', 'Authorization','preview']
-  }));
-
+}));
 app.options('*', cors());
 
 app.use(session({
@@ -48,12 +48,25 @@ app.use(session({
     store: sessionStore,
     resave: false,
     saveUninitialized: false, 
+    proxy: true, 
+    name: 'sessionForMyDearApp',
     cookie: {
-        sameSite: true,
-        secure: false, 
-        maxAge: 1000 * 60 * 60 * 2 
+        sameSite: 'none',
+        secure: true, 
+        maxAge: 1000 * 60 * 60 * 2, 
+        httpOnly: true
     }
 }))
+
+app.use((req, res, next) => {
+    console.log("Session ID:", req.sessionID);
+    console.log("Session Data:", req.session);
+    res.on("finish", () => {
+        console.log("Response Headers:", res.getHeaders());
+    });
+    next();
+});
+
 
 route(app);
 
