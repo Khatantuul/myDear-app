@@ -164,17 +164,17 @@ export const fetchAllAlbums = async(req, res) => {
                 const r = await getPresignedUrls(imageKeys);
                 populated.push({album, presignedUrls: r})
             }
-            setSuccessResponse(populated, res);
+        }else{
+            for (let album of albums){
+                const imageKeys = await getAlbumImageKeys(user.userID, album._id, preview);
+                // currentEtag = generateEtag(imageKeys);
+                const r = await getPresignedUrls(imageKeys);
+                populated.push({album, presignedUrls: r})
+            }
         }
    
         // let currentEtag = "";
-        for (let album of albums){
-            const imageKeys = await getAlbumImageKeys(user.userID, album._id, preview);
-            // currentEtag = generateEtag(imageKeys);
-            const r = await getPresignedUrls(imageKeys);
-            populated.push({album, presignedUrls: r})
-        }
-
+      
         // const previousEtag = req.headers['if-none-match'];
        
         // if(previousEtag === currentEtag){
