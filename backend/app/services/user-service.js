@@ -83,6 +83,14 @@ export const getPersonDetails = async (accessToken) => {
           headers: { Authorization: `Bearer ${accessToken}` },
           params: {personFields: 'names,emailAddresses,birthdays,locales,locations'}
         })
+        .then((response) => {
+            console.log("response inside getPersonDetails: ", response.data);
+            return response.data;
+        })
+        .catch((err) => {
+          console.log("Error in getPersonDetails", err);
+          throw err;
+        });
         return userInfo;
     }catch(err){
         console.log("Error in getPersonDetails", err);
