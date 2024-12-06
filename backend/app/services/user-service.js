@@ -75,14 +75,20 @@ export const addUserGoogleID = async (id, googleID) => {
   
 
 export const getPersonDetails = async (accessToken) => {
-    try{
-        // const {access_token} = req.body;
-        console.log("woerking inside getPersonDetails");
+    try{  
         const userInfo = await axios
         .get('https://people.googleapis.com/v1/people/me', {
           headers: { Authorization: `Bearer ${accessToken}` },
           params: {personFields: 'names,emailAddresses,birthdays,locales,locations'}
         })
+        .then((response) => {
+        
+            return response.data;
+        })
+        .catch((err) => {
+          console.log("Error in getting user details from People API", err);
+          throw err;
+        });
         return userInfo;
     }catch(err){
         console.log("Error in getPersonDetails", err);

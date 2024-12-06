@@ -154,9 +154,19 @@ export const fetchAllAlbums = async(req, res) => {
     try{
         const preview = req.headers['preview'];
         const user = req.session.user;
-        const albums = await albumServices.getAlbums(user.userID);
-       
+        let albums = await albumServices.getAlbums(user.userID);
+            
         let populated = [];
+        if(albums.length === 0){
+            albums = await albumServices.getDefaultAlbums();
+            for (let album of albums){
+                const imageKeys = await getAlbumImageKeys("652ecc958a61b83ac4f4afcf", album._id, preview);
+                const r = await getPresignedUrls(imageKeys);
+                populated.push({album, presignedUrls: r})
+            }
+            setSuccessResponse(populated, res);
+        }
+   
         // let currentEtag = "";
         for (let album of albums){
             const imageKeys = await getAlbumImageKeys(user.userID, album._id, preview);
@@ -165,7 +175,6 @@ export const fetchAllAlbums = async(req, res) => {
             populated.push({album, presignedUrls: r})
         }
 
-     
         // const previousEtag = req.headers['if-none-match'];
        
         // if(previousEtag === currentEtag){
@@ -177,7 +186,7 @@ export const fetchAllAlbums = async(req, res) => {
         // res.status(200).json(populated);
         setSuccessResponse(populated, res);
     }catch(err){
-        console.log("what happened in fetchAllAlbums", err);
+        console.log("Error in fetching all albums for user", err);
         setErrorResponse(err,res);
     }
 }

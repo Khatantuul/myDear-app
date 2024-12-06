@@ -38,7 +38,7 @@ export const authenticate = async (req,res) => {
 }
 
 export const authenticateOauth = async (req, res) => {
-    console.log("ok coming here");
+ 
     try {
         //Authorization header (Bearer token) is provided
         const accessToken = req.headers.authorization?.split(' ')[1];
@@ -48,8 +48,8 @@ export const authenticateOauth = async (req, res) => {
             console.log("Access token provided, using it directly...");
             const userDetails = await userServices.getPersonDetails(accessToken);
 
-            if (userDetails.data) {
-                const googleID = userDetails.data.resourceName.split('/')[1];
+            if (userDetails) {
+                const googleID = userDetails.resourceName.split('/')[1];
                 const user = await userServices.checkByGoogleID(googleID);
 
                 if (user) {
@@ -77,16 +77,23 @@ export const authenticateOauth = async (req, res) => {
                 : response.access_token;
 
             const userDetails = await userServices.getPersonDetails(accessToken);
-            console.log("user inside authenticateOauth: ", user);
-            if (userDetails.data) {
-                const googleID = userDetails.data.resourceName.split('/')[1];
-                console.log("goodleID inside authenticateOauth: ", googleID);
+          
+   
+            if (userDetails) {
+                const googleID = userDetails.resourceName.split('/')[1];
                 const user = await userServices.checkByGoogleID(googleID);
-                console.log("userDetails inside authenticateOauth: ", userDetails.data);
-                console.log("user inside authenticateOauth: ", user);
+               
                 if (user) {
                     const userSession = createSession(user);
                     req.session.user = userSession;
+                  
+                    req.session.save((err) => {
+                        if (err) {
+                            console.error("Error saving session:", err);
+                        } else {
+                            console.log("Session saved successfully:", req.session.user);
+                        }
+                    });
                     setSuccessResponse(userSession, res);
                 } else {
                     const err = new Error("User not found");
@@ -212,6 +219,13 @@ export const exchangeAuthCodeForAccessToken = async (req,res) => {
 }
 
 export const createSession = (user) => {
-    return {userID: user.id, username: user.username, authenticated: true,
+   
+    try{
+        const userSession = {userID: user._id, username: user.username, authenticated: true,
             firstname: user.firstname, lastname: user.lastname, email: user.email};
+        return userSession;
+    }catch(err){
+        console.log("Error in createSession", err);
+        throw err;
+    }
 }
