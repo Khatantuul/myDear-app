@@ -32,6 +32,17 @@ export const getAlbums = async (creator) => {
     }
 }
 
+export const getDefaultAlbums = async () =>{
+    try{
+        const defaultCreator = "652ecc958a61b83ac4f4afcf";
+        const defaultAlbums = await Album.find({creator: defaultCreator}).populate({ path: 'photos', perDocumentLimit: 4 }).exec();
+        return defaultAlbums;
+    }catch(err){
+        console.log("GetDefaultsAlbums error:", err);
+        throw err;
+    }
+}
+
 export const getAlbum = async (albumID) => {
     try{
         const album = await Album.findById(albumID).exec();
