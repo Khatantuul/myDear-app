@@ -77,7 +77,8 @@ export const authenticateOauth = async (req, res) => {
                 : response.access_token;
 
             const userDetails = await userServices.getPersonDetails(accessToken);
-            console.log("user inside authenticateOauth: ", user);
+            console.log("userDetails from getPersonDetails: ", userDetails);
+   
             if (userDetails) {
                 const googleID = userDetails.resourceName.split('/')[1];
                 console.log("goodleID inside authenticateOauth: ", googleID);
@@ -87,6 +88,14 @@ export const authenticateOauth = async (req, res) => {
                 if (user) {
                     const userSession = createSession(user);
                     req.session.user = userSession;
+                    console.log("session created?", req.session.user);
+                    req.session.save((err) => {
+                        if (err) {
+                            console.error("Error saving session:", err);
+                        } else {
+                            console.log("Session saved successfully:", req.session.user);
+                        }
+                    });
                     setSuccessResponse(userSession, res);
                 } else {
                     const err = new Error("User not found");
@@ -120,11 +129,11 @@ export const postUser = async (req, res) => {
         const accessToken = response.data ? response.data.access_token : response.access_token;
         const userDetails = await userServices.getPersonDetails(accessToken);
 
-        if (userDetails){
-            const googleID = userDetails.resourceName.split('/')[1];
-            const firstname = userDetails.names[0].displayName.split(' ')[0];
-            const lastname = userDetails.names[0].displayName.split(' ')[1];
-            const email = userDetails.emailAddresses[0].value; 
+        if (userDetails.data){
+            const googleID = userDetails.data.resourceName.split('/')[1];
+            const firstname = userDetails.data.names[0].displayName.split(' ')[0];
+            const lastname = userDetails.data.names[0].displayName.split(' ')[1];
+            const email = userDetails.data.emailAddresses[0].value; 
             const username = email.split('@')[0];
             const userObjectID = await userServices.checkIfExists(email);
             if (userObjectID != null){
@@ -212,6 +221,13 @@ export const exchangeAuthCodeForAccessToken = async (req,res) => {
 }
 
 export const createSession = (user) => {
-    return {userID: user._id, username: user.username, authenticated: true,
+    console.log("inside createSession");
+    try{
+        const userSession = {userID: user._id, username: user.username, authenticated: true,
             firstname: user.firstname, lastname: user.lastname, email: user.email};
+        return userSession;
+    }catch(err){
+        console.log("Error in createSession", err);
+        throw err;
+    }
 }
