@@ -7,7 +7,7 @@ import fs from "fs";
 import crypto from "crypto";
 
 const upload = multer({ storage: multer.memoryStorage() }); 
-
+const defaultAlbumIDs = ["674f3774dd66afeb37d40872","674f3256dd66afeb37d407f0","674f2d3edd66afeb37d40597","674e887e466597368d3f14b4"]
 
 const setSuccessResponse = (obj, res) =>{
     res.status(200);
@@ -220,7 +220,13 @@ export const fetchAllAlbumPhotos = async(req, res) => {
         throw err;
        }
        const album = await albumServices.getAlbum(albumId);
-       const imageKeys = await getAlbumImageKeys(userId, albumId, false);
+       console.log("album inside fetchAllAlbumPhotos", album);
+       if(albumId in defaultAlbumIDs){
+        const imageKeys = await getAlbumImageKeys("652ecc958a61b83ac4f4afcf", albumId, false);
+       }else{
+        const imageKeys = await getAlbumImageKeys(userId, albumId, false);
+       }
+      
     //    const imgKeys = imageKeys.slice(offset, offset+limit);
        
        const photoObj = await getPresignedUrls(imageKeys);
