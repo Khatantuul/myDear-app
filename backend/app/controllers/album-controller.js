@@ -220,11 +220,11 @@ export const fetchAllAlbumPhotos = async(req, res) => {
         throw err;
        }
        const album = await albumServices.getAlbum(albumId);
-       console.log("album inside fetchAllAlbumPhotos", album);
+       let imageKeys = [];
        if(albumId in defaultAlbumIDs){
-        const imageKeys = await getAlbumImageKeys("652ecc958a61b83ac4f4afcf", albumId, false);
+         imageKeys = await getAlbumImageKeys("652ecc958a61b83ac4f4afcf", albumId, false);
        }else{
-        const imageKeys = await getAlbumImageKeys(userId, albumId, false);
+         imageKeys = await getAlbumImageKeys(userId, albumId, false);
        }
       
     //    const imgKeys = imageKeys.slice(offset, offset+limit);
