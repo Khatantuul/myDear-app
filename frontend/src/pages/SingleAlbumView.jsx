@@ -107,7 +107,6 @@ const SingleAlbumView = () => {
         }, {
           withCredentials: true,
         }).then((res)=>{
-          console.log("response in deletion of photo", res.data);
           setDiscardDialog(false);
           setEdit(!edit);
           setChangesMade(false);
@@ -154,10 +153,8 @@ const SingleAlbumView = () => {
 
   useEffect(() => {
     if (modal) {
-      console.log("opening modal")
       ref.current?.showModal();
     }else{
-      console.log("closing modal")
       ref.current?.close();
     }
   }, [modal])

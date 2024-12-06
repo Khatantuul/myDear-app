@@ -19,7 +19,6 @@ const FileUploader = ({onFileSelected}) => {
 
       const handleDrop = (event) => {
         event.preventDefault();
-        console.log("calling drop here");
         event.stopPropagation();
         setFiles((prevFiles) => {
           const updatedFiles = [
@@ -36,7 +35,6 @@ const FileUploader = ({onFileSelected}) => {
 
     const handleUploadChange = (e) =>{
         const addedFiles = e.target.files;
-        console.log("this is just called");
         setFiles((prevFiles) => {
           const newFiles = [
             ...prevFiles,

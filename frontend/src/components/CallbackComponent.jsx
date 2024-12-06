@@ -75,7 +75,6 @@ const CallbackComponent = () => {
     };
     
     const authCode = getQueryParams('code');
-    console.log("I am getting the code",authCode);
     const stateParam = getQueryParams('state');
     const state = stateParam ? JSON.parse(stateParam) : null;
     if (authCode && state === null) {

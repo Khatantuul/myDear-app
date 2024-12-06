@@ -29,7 +29,6 @@ const AlbumList = ({ onFetch, filterType, searchTerms }) => {
         })
         .then((res) => {
           setAllAlbumsPopulated(res.data);
-          console.log("iinitial albums fetch", res.data)
           onFetch(res.data);
         })
         .catch((err) => {
@@ -96,7 +95,6 @@ const AlbumList = ({ onFetch, filterType, searchTerms }) => {
           `/search?searchTerms=${searchTerms}`,
           { withCredentials: true }
         );
-        console.log("res.data in albumlist",res.data)
         setAllAlbumsPopulated(res.data);
 
       } catch (err) {
