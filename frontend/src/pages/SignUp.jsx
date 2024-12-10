@@ -102,7 +102,7 @@ const SignUp = () => {
             
         flow: 'auth-code',
         ux_mode: 'redirect',
-        redirect_uri: '/callback'
+        redirect_uri: import.meta.env.VITE_REDIRECT_URI
     })
     
 
